@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baromètre Swisse Travel · DIGIVAS</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one narrow column, one step at a time for respondents; a wide consultant view behind a code. */
+:root {
+  /* Swisse Travel brand: navy #011a30 (logo, header text), burgundy #79162d (site buttons), red #fe211f (logo plane) */
+  --bg: #f8fafc; --surface: #ffffff; --ink: #011a30; --muted: #4f5d6b; --line: #dde3ea;
+  --accent: #79162d; --accent-soft: #f6e8eb; --brand-red: #e8231d; --good: #1f7a4d; --warn: #b7791f; --crit: #b4432f;
+  --h1: #f6dcd6; --h2: #f7ead2; --h3: #dcefe3; --h4: #b9e0c9;
+  --display: "Montserrat", "Segoe UI", system-ui, sans-serif;
+  --body: "Open Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #071423; --surface: #0e1f33; --ink: #e8eef5; --muted: #9aaabb; --line: #22364d;
+    --accent: #e0607a; --accent-soft: #3a1622; --brand-red: #ff5a4f; --good: #5bc48a; --warn: #e0a64a; --crit: #ec7a63;
+    --h1: #4a2620; --h2: #47391d; --h3: #1f3d2c; --h4: #245a3d; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #071423; --surface: #0e1f33; --ink: #e8eef5; --muted: #9aaabb; --line: #22364d;
+  --accent: #e0607a; --accent-soft: #3a1622; --brand-red: #ff5a4f; --good: #5bc48a; --warn: #e0a64a; --crit: #ec7a63;
+  --h1: #4a2620; --h2: #47391d; --h3: #1f3d2c; --h4: #245a3d; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 48px; }
+.narrow { max-width: 680px; margin: 0 auto; }
+.wide { max-width: 1180px; margin: 0 auto; }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--brand-red); font-weight: 600; }
+.brandbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 22px; padding-bottom: 14px; border-bottom: 2px solid var(--accent); }
+.brandbar .logo { display: inline-flex; background: #ffffff; border-radius: 10px; padding: 6px 10px; }
+.brandbar .logo img { height: 42px; width: auto; display: block; }
+.brandbar .tagline { font-size: 12px; color: var(--muted); }
+h1 { font-family: var(--display); font-weight: 700; letter-spacing: -.01em; font-size: clamp(28px, 5vw, 38px); line-height: 1.12; margin: 6px 0 10px; text-wrap: balance; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 24px; margin: 0; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 600; font-size: 19px; margin: 0; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; color: var(--muted); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: grid; gap: 16px; align-content: start; }
+.stack { display: grid; gap: 14px; }
+.steps { display: flex; gap: 6px; margin: 18px 0 14px; }
+.steps span { flex: 1; height: 5px; border-radius: 999px; background: var(--line); }
+.steps span.on { background: var(--accent); }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 600; }
+input[type="text"], input[type="password"], textarea { width: 100%; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+input[type="text"]:focus-visible, input[type="password"]:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+textarea { min-height: 110px; resize: vertical; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg input, .scale input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label { border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; cursor: pointer; background: var(--bg); font-weight: 500; }
+.seg input:checked + label { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+.seg input:focus-visible + label, .scale input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
+.q { display: grid; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.q:last-child { border-bottom: 0; padding-bottom: 0; }
+.qn { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-right: 6px; }
+.scale { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.scale label { display: grid; place-items: center; text-align: center; font-size: 13px; line-height: 1.2; padding: 8px 4px; min-height: 44px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; background: var(--surface); color: var(--muted); }
+.scale label:hover { border-color: var(--accent); }
+.scale input:checked + label { background: var(--accent); border-color: var(--accent); color: var(--surface); font-weight: 600; }
+.nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: center; }
+button, .btn { font: inherit; cursor: pointer; border-radius: 10px; padding: 11px 16px; border: 1px solid var(--accent); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+button:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.primary { background: var(--accent); color: var(--surface); font-weight: 600; }
+.ghost { background: transparent; color: var(--accent); }
+.danger { background: transparent; color: var(--crit); border-color: var(--crit); padding: 5px 10px; font-size: 13px; }
+.error { color: var(--crit); font-size: 13px; min-height: 1.2em; }
+.ok { color: var(--good); font-size: 13px; min-height: 1.2em; }
+.codebox { font-family: var(--mono); font-size: 12px; background: var(--bg); border: 1px dashed var(--line); border-radius: 8px; padding: 10px; overflow-wrap: anywhere; }
+.footer-link { margin-top: 28px; text-align: center; font-size: 12px; }
+.footer-link a { color: var(--muted); }
+/* consultant view */
+.topbar { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+@media (max-width: 760px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 2px; }
+.kpi .v { font-family: var(--mono); font-size: 28px; font-variant-numeric: tabular-nums; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-bottom: 16px; }
+@media (max-width: 860px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+.dimrow { display: grid; gap: 6px; }
+.dimtop { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; font-weight: 500; }
+.pair { display: grid; grid-template-columns: 74px minmax(0, 1fr) 34px; gap: 8px; align-items: center; font-size: 12px; color: var(--muted); }
+.pair .num { font-family: var(--mono); text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+.btrack { position: relative; height: 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.bfill { height: 100%; border-radius: 999px; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.list li { border-left: 3px solid var(--crit); padding: 1px 0 1px 10px; font-size: 14px; }
+.list li .meta { display: block; font-size: 12px; color: var(--muted); font-family: var(--mono); }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: center; white-space: nowrap; }
+th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--surface); }
+td.name, th.name { text-align: left; position: sticky; left: 0; background: var(--surface); z-index: 1; }
+td.c1 { background: var(--h1); } td.c2 { background: var(--h2); } td.c3 { background: var(--h3); } td.c4 { background: var(--h4); }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.tag { font-size: 11px; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.comments { display: grid; gap: 10px; }
+.comment { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--bg); font-size: 14px; }
+.comment b { display: block; font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 2px; }
+.empty { text-align: center; padding: 28px 16px; color: var(--muted); }
+.qlegend { font-size: 12px; color: var(--muted); columns: 2; column-gap: 24px; margin-top: 10px; }
+@media (max-width: 760px) { .qlegend { columns: 1; } }
+.qlegend div { break-inside: avoid; margin-bottom: 3px; }
+</style>
+
+</head><body>
+<div id="app"></div>
+
+<script>
+const DIMS = [
+  { id: "roles", name: "Rôles et responsabilités", qs: [
+    "Chacun sait précisément ce qui relève de son poste.",
+    "Pour chaque tâche importante, une seule personne en est responsable.",
+    "Quand un collègue est absent, quelqu'un sait reprendre ses dossiers.",
+    "Les fiches de poste sont écrites et à jour.",
+    "On sait qui répond aux messages WhatsApp à chaque moment de la journée."]},
+  { id: "process", name: "Processus et passations", qs: [
+    "Un dossier client passe de la vente au suivi sans information perdue.",
+    "Les délais à respecter (devis, dossier, départ) sont connus de tous.",
+    "Les offres publiées sur le site et les réseaux sont à jour et exactes.",
+    "Les encaissements et remboursements suivent une règle écrite.",
+    "Les erreurs sont repérées par l'équipe avant d'atteindre le client."]},
+  { id: "pilot", name: "Pilotage et reconnaissance", qs: [
+    "L'équipe se réunit régulièrement pour faire le point.",
+    "Nous suivons quelques chiffres clés, comme le délai de réponse ou le remplissage des départs.",
+    "Chacun sait sur quoi son travail est évalué.",
+    "Les efforts et les résultats sont reconnus.",
+    "La saison de Ramadan est préparée plusieurs semaines à l'avance."]},
+  { id: "skills", name: "Compétences et outils", qs: [
+    "L'équipe maîtrise bien le logiciel de réservation.",
+    "Nous utilisons déjà des outils d'IA dans notre travail.",
+    "Il existe des règles claires sur l'usage de l'IA et des données des clients.",
+    "Chacun reçoit les formations dont il a besoin.",
+    "Je me sens prêt·e à utiliser de nouveaux outils numériques."]}
+];
+const ALLQ = DIMS.flatMap(d => d.qs);
+const SCALE = ["Pas du tout", "Plutôt non", "Plutôt oui", "Tout à fait"];
+const SB_URL = "https://jecydmxekdorycgfwtwy.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplY3lkbXhla2RvcnljZ2Z3dHd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNjIzMzgsImV4cCI6MjEwNzczODMzOH0.YLQ13bAlEEgAHgMbGohgTXMv6SRRy1pN7TCXT-8Yfi8"; // clé publique : elle n'autorise que l'envoi de réponses
+const MISSION = (new URLSearchParams(location.search).get("m") || "swisse-travel").toLowerCase();
+async function sb(path, body, prefer) {
+  const r = await fetch(SB_URL + "/rest/v1/" + path, { method: "POST", headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": prefer || "return=minimal" }, body: JSON.stringify(body) });
+  if (!r.ok) { let m = ""; try { m = (await r.json()).message || ""; } catch (e) {} const err = new Error(m || ("HTTP " + r.status)); err.status = r.status; throw err; }
+  return r.status === 204 || r.status === 201 ? null : r.json();
+}
+const LOGO = "data:image/webp;base64,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";
+const app = document.getElementById("app");
+const el = (tag, attrs = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v); else if (v !== false && v != null) n.setAttribute(k, v === true ? "" : v);
+  }
+  kids.flat().forEach(c => c != null && n.append(c.nodeType ? c : document.createTextNode(c)));
+  return n;
+};
+const brandBar = () => el("div", { class: "brandbar" }, el("span", { class: "logo" }, el("img", { src: LOGO, alt: "Swisse Travel", width: "177", height: "42" })), el("span", { class: "tagline", text: "Plus qu'un voyage, une expérience" }));
+const clean = s => String(s || "").replace(/[|\r\n]+/g, " ").replace(/\s+/g, " ").trim();
+
+/* ---------- Respondent flow ---------- */
+const state = { step: 0, name: "", role: "", answers: new Array(20).fill(null), comment: "" };
+
+function stepBar() { return el("div", { class: "steps", "aria-hidden": "true" }, [0,1,2,3,4,5].map(i => el("span", { class: i <= state.step ? "on" : "" }))); }
+
+function renderRespondent() {
+  app.textContent = "";
+  const wrap = el("div", { class: "narrow" });
+  wrap.append(brandBar());
+  wrap.append(el("div", { class: "eyebrow", text: "Accompagnement RH · Diagnostic" }));
+  if (state.step === 0) renderIntro(wrap);
+  else if (state.step <= 4) renderDim(wrap, state.step - 1);
+  else if (state.step === 5) renderComment(wrap);
+  else renderThanks(wrap);
+  wrap.append(el("div", { class: "footer-link" }, el("span", { class: "muted", text: "Questionnaire proposé par DIGIVAS, cabinet de conseil RH · " }), el("a", { href: "#espace-digivas", text: "Espace DIGIVAS" })));
+  app.append(wrap);
+  window.scrollTo(0, 0);
+}
+
+function renderIntro(wrap) {
+  wrap.append(el("h1", { text: "Baromètre de l'organisation" }));
+  wrap.append(el("p", { class: "muted", text: "Vingt affirmations sur la façon dont l'agence fonctionne au quotidien. Pour chacune, indiquez si elle correspond à ce que vous vivez. Il n'y a pas de bonne ou de mauvaise réponse : c'est votre regard qui compte." }));
+  wrap.append(stepBar());
+  const err = el("p", { class: "error", role: "alert" });
+  const nameIn = el("input", { type: "text", id: "nom", autocomplete: "name", maxlength: "60", placeholder: "Ex. Fatima Zahra Alaoui", value: state.name });
+  const seg = el("div", { class: "seg", role: "radiogroup", "aria-label": "Profil" },
+    ["Direction", "Équipe"].flatMap((r, i) => {
+      const inp = el("input", { type: "radio", name: "role", id: "role-" + i, value: r });
+      if (state.role === r) inp.checked = true;
+      return [inp, el("label", { for: "role-" + i, text: r === "Direction" ? "Direction" : "Membre de l'équipe" })];
+    }));
+  const card = el("div", { class: "card" },
+    el("div", { class: "field" }, el("label", { for: "nom", text: "Votre prénom et votre nom" }), nameIn),
+    el("div", { class: "field" }, el("span", { style: "font-weight:600", text: "Vous répondez en tant que" }), seg),
+    el("p", { class: "small", text: "Vos réponses individuelles sont lues uniquement par le cabinet DIGIVAS. Elles servent à préparer le diagnostic de l'organisation, pas à évaluer les personnes, et sont présentées à la direction de façon regroupée, dans le respect de la loi 09-08 sur la protection des données personnelles." }),
+    el("p", { class: "small", text: "Durée : 5 minutes environ, en 5 étapes." }),
+    err,
+    el("div", { class: "nav" }, el("span"), el("button", { class: "primary", text: "Commencer", onclick: () => {
+      const role = document.querySelector('input[name="role"]:checked');
+      state.name = clean(nameIn.value);
+      if (state.name.length < 2) { err.textContent = "Indiquez votre prénom et votre nom pour continuer."; nameIn.focus(); return; }
+      if (!role) { err.textContent = "Choisissez votre profil pour continuer."; return; }
+      state.role = role.value; state.step = 1; renderRespondent();
+    }}))
+  );
+  wrap.append(card);
+}
+
+function renderDim(wrap, d) {
+  const dim = DIMS[d];
+  wrap.append(el("h1", { text: dim.name }));
+  wrap.append(el("p", { class: "muted", text: "Étape " + (d + 1) + " sur 5. Répondez aux cinq affirmations pour continuer." }));
+  wrap.append(stepBar());
+  const card = el("div", { class: "card" });
+  const list = el("div");
+  dim.qs.forEach((text, k) => {
+    const idx = d * 5 + k;
+    const scale = el("div", { class: "scale", role: "radiogroup", "aria-label": text },
+      SCALE.flatMap((lab, v) => {
+        const id = "q" + idx + "-" + (v + 1);
+        const inp = el("input", { type: "radio", name: "q" + idx, id, value: v + 1, onchange: () => { state.answers[idx] = v + 1; err.textContent = ""; } });
+        if (state.answers[idx] === v + 1) inp.checked = true;
+        return [inp, el("label", { for: id, text: lab })];
+      }));
+    list.append(el("div", { class: "q" }, el("p", {}, el("span", { class: "qn", text: String(idx + 1).padStart(2, "0") }), text), scale));
+  });
+  const err = el("p", { class: "error", role: "alert" });
+  card.append(list, err, el("div", { class: "nav" },
+    el("button", { class: "ghost", text: "Retour", onclick: () => { state.step--; renderRespondent(); } }),
+    el("button", { class: "primary", text: "Continuer", onclick: () => {
+      const missing = state.answers.slice(d * 5, d * 5 + 5).filter(v => v == null).length;
+      if (missing) { err.textContent = missing === 1 ? "Il reste une affirmation sans réponse." : "Il reste " + missing + " affirmations sans réponse."; return; }
+      state.step++; renderRespondent();
+    }})));
+  wrap.append(card);
+}
+
+function renderComment(wrap) {
+  wrap.append(el("h1", { text: "Une dernière question" }));
+  wrap.append(el("p", { class: "muted", text: "Étape 5 sur 5. Cette question est facultative." }));
+  wrap.append(stepBar());
+  const ta = el("textarea", { id: "commentaire", maxlength: "400", placeholder: "Par exemple : savoir qui suit un dossier quand le collègue est absent." });
+  ta.value = state.comment;
+  const err = el("p", { class: "error", role: "alert" });
+  wrap.append(el("div", { class: "card" },
+    el("div", { class: "field" }, el("label", { for: "commentaire", text: "Qu'est-ce qui vous ferait gagner le plus de temps ou d'énergie dans votre travail ?" }), ta),
+    el("div", { class: "nav" },
+      el("button", { class: "ghost", text: "Retour", onclick: () => { state.comment = ta.value; state.step--; renderRespondent(); } }),
+      el("button", { class: "primary", id: "send-btn", text: "Envoyer mes réponses", onclick: async (e) => {
+        const btn = e.currentTarget; state.comment = clean(ta.value).slice(0, 400);
+        btn.disabled = true; btn.textContent = "Envoi en cours…"; err.textContent = "";
+        try {
+          await sb("digivas_reponses", { mission: MISSION, nom: state.name, profil: state.role, reponses: state.answers.join(""), commentaire: state.comment || null });
+          state.step = 6; renderRespondent();
+        } catch (x) {
+          btn.disabled = false; btn.textContent = "Réessayer l'envoi";
+          err.textContent = (x.status === 401 || x.status === 403) ? "Ce questionnaire n'est plus ouvert aux réponses. Contactez le cabinet DIGIVAS." : "L'envoi n'a pas abouti. Vérifiez votre connexion internet, puis réessayez.";
+        }
+      } })), err));
+}
+
+function renderThanks(wrap) {
+  wrap.append(el("h1", { text: "Merci " + state.name.split(" ")[0] + "." }));
+  wrap.append(el("p", { class: "muted", text: "Vos réponses ont bien été enregistrées. Il n'y a rien d'autre à faire." }));
+  wrap.append(stepBar());
+  wrap.append(el("div", { class: "card" },
+    el("p", { text: "Elles seront analysées avec celles de vos collègues pour préparer le diagnostic de l'organisation. Les résultats seront partagés avec l'équipe de façon regroupée." }),
+    el("p", { class: "small", text: "Vous pouvez fermer cette page." })));
+}
+
+/* ---------- Espace DIGIVAS ---------- */
+let code = "", rows = [], dupes = 0, timer = null;
+try { code = sessionStorage.getItem("digivas-code") || ""; } catch (e) {}
+const denied = x => x.status === 401 || /acces_refuse/.test(x.message || "");
+
+function renderGate(msg) {
+  app.textContent = "";
+  const err = el("p", { class: "error", role: "alert", text: msg || "" });
+  const inp = el("input", { type: "password", id: "code", autocomplete: "current-password", placeholder: "Code d'accès" });
+  const btn = el("button", { class: "primary", text: "Ouvrir" });
+  const go = async () => {
+    const c = inp.value.trim(); if (!c) { err.textContent = "Saisissez le code d'accès."; return; }
+    btn.disabled = true; btn.textContent = "Vérification…";
+    try { await load(c); code = c; try { sessionStorage.setItem("digivas-code", c); } catch (e) {} renderConsultant(); }
+    catch (x) { btn.disabled = false; btn.textContent = "Ouvrir"; err.textContent = denied(x) ? "Code incorrect." : "Connexion impossible. Vérifiez votre connexion internet."; inp.select(); }
+  };
+  btn.addEventListener("click", go);
+  inp.addEventListener("keydown", e => { if (e.key === "Enter") go(); });
+  app.append(el("div", { class: "narrow" }, brandBar(),
+    el("div", { class: "eyebrow", text: "DIGIVAS · Cabinet de conseil RH" }),
+    el("h1", { text: "Espace DIGIVAS" }),
+    el("div", { class: "card" },
+      el("div", { class: "field" }, el("label", { for: "code", text: "Code d'accès aux résultats" }), inp),
+      el("p", { class: "small", text: "Le code est vérifié par le serveur. Sans lui, aucune réponse n'est accessible." }),
+      err,
+      el("div", { class: "nav" }, el("a", { href: "#", class: "btn ghost", text: "Retour au questionnaire" }), btn))));
+  inp.focus();
+}
+
+async function load(c) {
+  const data = await sb("rpc/digivas_resultats", { p_mission: MISSION, p_code: c }, "return=representation");
+  const seen = new Set(); dupes = 0; rows = [];
+  for (const r of data) { // les plus récentes d'abord : on garde la dernière réponse de chaque personne
+    const k = slug(r.nom) + "|" + r.profil;
+    if (seen.has(k)) { dupes++; continue; }
+    seen.add(k); rows.push(r);
+  }
+  rows.sort((a, b) => (a.profil === b.profil ? a.nom.localeCompare(b.nom, "fr") : a.profil === "Direction" ? -1 : 1));
+}
+
+function renderConsultant() {
+  app.textContent = "";
+  const root = el("div", { class: "wide" });
+  app.append(root);
+  root.append(brandBar());
+  const stamp = el("span", { class: "small" });
+  const body = el("div");
+  const refresh = async () => {
+    try { await load(code); drawResults(body); stamp.textContent = "Mis à jour à " + new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) + " · actualisation automatique chaque minute"; }
+    catch (x) { if (denied(x)) { code = ""; try { sessionStorage.removeItem("digivas-code"); } catch (e) {} clearInterval(timer); renderGate("Le code n'est plus valide."); } else stamp.textContent = "Actualisation impossible pour le moment."; }
+  };
+  window.refreshResults = refresh;
+  root.append(el("div", { class: "topbar" },
+    el("div", {}, el("div", { class: "eyebrow", text: "Espace DIGIVAS · accès réservé" }), el("h1", { text: "Résultats du baromètre" }), stamp),
+    el("div", { class: "nav" },
+      el("button", { class: "ghost", text: "Actualiser", onclick: refresh }),
+      el("button", { class: "ghost", text: "Télécharger en CSV", onclick: exportCsv }),
+      el("button", { class: "ghost", text: "Verrouiller", onclick: () => { code = ""; try { sessionStorage.removeItem("digivas-code"); } catch (e) {} clearInterval(timer); location.hash = ""; } }))));
+  root.append(body);
+  drawResults(body);
+  clearInterval(timer); timer = setInterval(refresh, 60000);
+  refresh();
+}
+
+const scorePct = arr => { const a = arr.filter(v => v != null); if (!a.length) return null; return Math.round((a.reduce((s, v) => s + v, 0) / a.length - 1) / 3 * 100); };
+const color = s => s == null ? "var(--line)" : s < 40 ? "var(--crit)" : s < 70 ? "var(--warn)" : "var(--good)";
+const avg = arr => arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : null;
+
+const slug = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "sans-nom";
+
+function drawResults(body) {
+  body.textContent = "";
+  const dir = rows.filter(r => r.profil === "Direction"), eq = rows.filter(r => r.profil === "Équipe");
+  const nums = r => r.reponses.split("").map(Number);
+  const dimScore = (list, d) => scorePct(list.flatMap(r => nums(r).slice(d * 5, d * 5 + 5)));
+  const allScore = list => scorePct(list.flatMap(nums));
+
+  body.append(el("div", { class: "kpis" },
+    kpi("Réponses reçues", rows.length), kpi("Direction", dir.length), kpi("Équipe", eq.length), kpi("Score global / 100", allScore(rows) ?? "–")));
+
+  if (!rows.length) {
+    body.append(el("div", { class: "card empty" }, el("p", { text: "Aucune réponse pour l'instant. Dès qu'un membre de l'équipe envoie le questionnaire, sa réponse apparaît ici : scores, écart entre direction et équipe, priorités et carte des réponses." })));
+    return;
+  }
+
+  const dims = el("div", { class: "card" }, el("h3", { text: "Scores par dimension" }));
+  DIMS.forEach((d, i) => {
+    const sd = dimScore(dir, i), se = dimScore(eq, i);
+    dims.append(el("div", { class: "dimrow" }, el("div", { class: "dimtop" }, el("span", { text: d.name })),
+      pair("Direction", sd), pair("Équipe", se)));
+  });
+  dims.append(el("div", { class: "legend" }, el("span", {}, el("i", { style: "background:var(--crit)" }), "À structurer, moins de 40"), el("span", {}, el("i", { style: "background:var(--warn)" }), "En construction"), el("span", {}, el("i", { style: "background:var(--good)" }), "Solide, 70 et plus")));
+
+  const qAvg = (list, i) => avg(list.map(r => Number(r.reponses[i])));
+  const weakest = ALLQ.map((t, i) => ({ t, i, a: qAvg(rows, i) })).sort((x, y) => x.a - y.a || x.i - y.i).slice(0, 5);
+  const weakList = el("ul", { class: "list" }, weakest.map(o => el("li", {}, o.t, el("span", { class: "meta", text: "Q" + String(o.i + 1).padStart(2, "0") + " · moyenne " + o.a.toFixed(1).replace(".", ",") + " sur 4" }))));
+  const right = el("div", { class: "stack" }, el("div", { class: "card" }, el("h3", { text: "Les cinq points les plus faibles" }), weakList));
+  if (dir.length && eq.length) {
+    const gaps = ALLQ.map((t, i) => ({ t, i, g: qAvg(dir, i) - qAvg(eq, i) })).filter(o => Math.abs(o.g) >= 1).sort((x, y) => Math.abs(y.g) - Math.abs(x.g)).slice(0, 5);
+    right.append(el("div", { class: "card" }, el("h3", { text: "Où la direction et l'équipe voient les choses différemment" }),
+      gaps.length ? el("ul", { class: "list" }, gaps.map(o => el("li", { style: "border-color:var(--warn)" }, o.t, el("span", { class: "meta", text: "Q" + String(o.i + 1).padStart(2, "0") + " · direction " + qAvg(dir, o.i).toFixed(1).replace(".", ",") + ", équipe " + qAvg(eq, o.i).toFixed(1).replace(".", ",") + (o.g > 0 ? " · la direction est plus positive" : " · l'équipe est plus positive") }))))
+      : el("p", { class: "small", text: "Aucun écart d'un point ou plus sur l'échelle de 1 à 4." })));
+  } else right.append(el("div", { class: "card" }, el("h3", { text: "Écart entre direction et équipe" }), el("p", { class: "small", text: "Il apparaîtra dès qu'au moins une réponse de chaque profil aura été ajoutée." })));
+  body.append(el("div", { class: "grid2" }, dims, right));
+
+  const head = el("tr", {}, el("th", { class: "name", text: "Personne" }), el("th", { text: "Profil" }), ALLQ.map((_, i) => el("th", { title: ALLQ[i], text: "Q" + String(i + 1).padStart(2, "0") })), DIMS.map(d => el("th", { text: d.name.split(" ")[0] })), el("th", { text: "Global" }), el("th"));
+  const trs = rows.map(r => el("tr", {},
+    el("td", { class: "name", text: r.nom }), el("td", {}, el("span", { class: "tag", text: r.profil })),
+    nums(r).map(v => el("td", { class: "c" + v, text: v })),
+    DIMS.map((_, i) => el("td", { class: "num", text: scorePct(nums(r).slice(i * 5, i * 5 + 5)) })),
+    el("td", { class: "num", style: "font-weight:600", text: scorePct(nums(r)) }),
+    el("td", {}, delBtn(r))));
+  const avgRow = el("tr", {}, el("td", { class: "name", style: "font-weight:600", text: "Moyenne" }), el("td"), ALLQ.map((_, i) => el("td", { class: "num", text: qAvg(rows, i).toFixed(1).replace(".", ",") })), DIMS.map((_, i) => el("td", { class: "num", text: dimScore(rows, i) })), el("td", { class: "num", style: "font-weight:600", text: allScore(rows) }), el("td"));
+  const legend = el("div", { class: "qlegend" }, ALLQ.map((t, i) => el("div", {}, el("span", { class: "qn", text: "Q" + String(i + 1).padStart(2, "0") }), t)));
+  body.append(el("div", { class: "card", style: "margin-bottom:16px" }, el("h3", { text: "Carte des réponses" }),
+    el("div", { class: "legend" }, ["Pas du tout", "Plutôt non", "Plutôt oui", "Tout à fait"].map((l, i) => el("span", {}, el("i", { style: "background:var(--h" + (i + 1) + ")" }), (i + 1) + " " + l))),
+    el("div", { class: "tablewrap" }, el("table", {}, el("thead", {}, head), el("tbody", {}, trs, avgRow))), legend));
+
+  const coms = rows.filter(r => r.commentaire);
+  body.append(el("div", { class: "card", style: "margin-bottom:16px" }, el("h3", { text: "Ce qui ferait gagner du temps, selon chacun" }),
+    coms.length ? el("div", { class: "comments" }, coms.map(r => el("div", { class: "comment" }, el("b", { text: r.nom + " · " + r.profil }), r.commentaire))) : el("p", { class: "small", text: "Aucun commentaire reçu." })));
+  if (dupes) body.append(el("p", { class: "small", text: dupes + (dupes > 1 ? " réponses en double ont été ignorées" : " réponse en double a été ignorée") + " : seule la plus récente de chaque personne est prise en compte." }));
+}
+
+function kpi(label, v) { return el("div", { class: "kpi" }, el("span", { class: "small", text: label }), el("span", { class: "v", text: v })); }
+function pair(label, s) {
+  return el("div", { class: "pair" }, el("span", { text: label }),
+    el("div", { class: "btrack" }, el("div", { class: "bfill", style: "width:" + (s ?? 0) + "%;background:" + color(s) })),
+    el("span", { class: "num", text: s ?? "–" }));
+}
+function delBtn(r) {
+  let armed = false;
+  const b = el("button", { class: "danger", text: "Retirer", onclick: async () => {
+    if (!armed) { armed = true; b.textContent = "Confirmer"; setTimeout(() => { armed = false; b.textContent = "Retirer"; }, 4000); return; }
+    b.disabled = true; try { await sb("rpc/digivas_supprimer", { p_mission: MISSION, p_code: code, p_id: r.id }); window.refreshResults && window.refreshResults(); } catch (e) { b.disabled = false; b.textContent = "Échec"; }
+  }});
+  return b;
+}
+function exportCsv() {
+  const q = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+  const lines = [["Date", "Nom", "Profil", ...ALLQ.map((_, i) => "Q" + (i + 1)), ...DIMS.map(d => d.name), "Global", "Commentaire"].map(q).join(";")];
+  rows.forEach(r => { const n = r.reponses.split("").map(Number); lines.push([new Date(r.created_at).toLocaleString("fr-FR"), r.nom, r.profil, ...n, ...DIMS.map((_, i) => scorePct(n.slice(i * 5, i * 5 + 5))), scorePct(n), r.commentaire || ""].map(q).join(";")); });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" }));
+  a.download = "barometre-" + MISSION + ".csv"; document.body.append(a); a.click(); a.remove();
+}
+
+function route() {
+  if (location.hash === "#espace-digivas") { code ? renderConsultant() : renderGate(); }
+  else { clearInterval(timer); renderRespondent(); }
+}
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body></html>
