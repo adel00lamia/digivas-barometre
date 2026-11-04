@@ -12,6 +12,7 @@
   --bg: #f8fafc; --surface: #ffffff; --ink: #011a30; --muted: #4f5d6b; --line: #dde3ea;
   --accent: #79162d; --accent-soft: #f6e8eb; --brand-red: #e8231d; --good: #1f7a4d; --warn: #b7791f; --crit: #b4432f;
   --h1: #f6dcd6; --h2: #f7ead2; --h3: #dcefe3; --h4: #b9e0c9;
+  --l1: #c2473a; --l2: #eda99e; --l3: #9fd3b4; --l4: #2f8f5b;
   --display: "Montserrat", "Segoe UI", system-ui, sans-serif;
   --body: "Open Sans", "Segoe UI", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
@@ -20,13 +21,13 @@
   :root:not([data-theme="light"]) {
     --bg: #071423; --surface: #0e1f33; --ink: #e8eef5; --muted: #9aaabb; --line: #22364d;
     --accent: #e0607a; --accent-soft: #3a1622; --brand-red: #ff5a4f; --good: #5bc48a; --warn: #e0a64a; --crit: #ec7a63;
-    --h1: #4a2620; --h2: #47391d; --h3: #1f3d2c; --h4: #245a3d; color-scheme: dark;
+    --h1: #4a2620; --h2: #47391d; --h3: #1f3d2c; --h4: #245a3d; --l1: #e0675a; --l2: #8a4a43; --l3: #2f6b4b; --l4: #5bc48a; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #071423; --surface: #0e1f33; --ink: #e8eef5; --muted: #9aaabb; --line: #22364d;
   --accent: #e0607a; --accent-soft: #3a1622; --brand-red: #ff5a4f; --good: #5bc48a; --warn: #e0a64a; --crit: #ec7a63;
-  --h1: #4a2620; --h2: #47391d; --h3: #1f3d2c; --h4: #245a3d; color-scheme: dark;
+  --h1: #4a2620; --h2: #47391d; --h3: #1f3d2c; --h4: #245a3d; --l1: #e0675a; --l2: #8a4a43; --l3: #2f6b4b; --l4: #5bc48a; color-scheme: dark;
 }
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55;
@@ -111,6 +112,30 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .qlegend { font-size: 12px; color: var(--muted); columns: 2; column-gap: 24px; margin-top: 10px; }
 @media (max-width: 760px) { .qlegend { columns: 1; } }
 .qlegend div { break-inside: avoid; margin-bottom: 3px; }
+.kpi .sub { font-size: 12px; color: var(--muted); }
+.effin { width: 64px; padding: 2px 6px; font: inherit; font-size: 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; margin: 4px 0 16px; }
+.pillset { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.pillset button { border: 0; border-radius: 0; padding: 7px 14px; background: var(--surface); color: var(--muted); font-size: 13px; }
+.pillset button[aria-pressed="true"] { background: var(--accent); color: var(--surface); font-weight: 600; }
+.toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); cursor: pointer; }
+.insights { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .insights { grid-template-columns: minmax(0, 1fr); } }
+.insight { border-left: 3px solid var(--accent); background: var(--bg); padding: 10px 12px; border-radius: 0 8px 8px 0; font-size: 14px; }
+.insight b { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 3px; }
+.gapnum { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.lik { display: grid; gap: 7px; }
+.likrow { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) 46px; gap: 12px; align-items: center; font-size: 13px; }
+@media (max-width: 760px) { .likrow { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
+.likrow .lt { min-width: 0; }
+.likbar { display: grid; grid-template-columns: 1fr 1fr; height: 16px; }
+.likbar .neg { display: flex; justify-content: flex-end; border-right: 1.5px solid var(--ink); }
+.likbar .pos { display: flex; }
+.likbar span { height: 100%; }
+.likpct { font-family: var(--mono); font-size: 12px; color: var(--muted); text-align: right; }
+.likaxis { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) 46px; gap: 12px; font-size: 11px; color: var(--muted); }
+.likaxis div:nth-child(2) { display: flex; justify-content: space-between; }
+@media (max-width: 760px) { .likaxis { grid-template-columns: minmax(0, 1fr); } .likaxis div:first-child, .likaxis div:last-child { display: none; } }
 </style>
 
 </head><body>
@@ -347,61 +372,127 @@ const avg = arr => arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : nu
 
 const slug = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "sans-nom";
 
+let filt = "Tous", hideNames = false;
+try { hideNames = localStorage.getItem("digivas-anon") === "1"; } catch (e) {}
+const lvlLabel = v => v == null ? "–" : v < 40 ? "À structurer" : v < 70 ? "En construction" : "Solide";
+const fmt1 = x => x.toFixed(1).replace(".", ",");
+const signed = x => (x > 0 ? "+" : "") + x;
+const qn = i => "Q" + String(i + 1).padStart(2, "0");
+
 function drawResults(body) {
   body.textContent = "";
-  const dir = rows.filter(r => r.profil === "Direction"), eq = rows.filter(r => r.profil === "Équipe");
   const nums = r => r.reponses.split("").map(Number);
   const dimScore = (list, d) => scorePct(list.flatMap(r => nums(r).slice(d * 5, d * 5 + 5)));
   const allScore = list => scorePct(list.flatMap(nums));
+  const qAvg = (list, i) => list.length ? avg(list.map(r => Number(r.reponses[i]))) : null;
+  const dir = rows.filter(r => r.profil === "Direction"), eq = rows.filter(r => r.profil === "Équipe");
+  const sel = filt === "Direction" ? dir : filt === "Équipe" ? eq : rows;
+  const both = dir.length > 0 && eq.length > 0;
+  let expected = 0; try { expected = Number(localStorage.getItem("digivas-effectif-" + MISSION)) || 0; } catch (e) {}
+  const g = allScore(rows);
 
+  const eff = el("input", { type: "number", id: "effectif", min: "1", max: "500", class: "effin", placeholder: "nb", value: expected || "" });
+  eff.addEventListener("change", () => { try { localStorage.setItem("digivas-effectif-" + MISSION, eff.value); } catch (e) {} drawResults(body); });
   body.append(el("div", { class: "kpis" },
-    kpi("Réponses reçues", rows.length), kpi("Direction", dir.length), kpi("Équipe", eq.length), kpi("Score global / 100", allScore(rows) ?? "–")));
+    kpi("Réponses reçues", rows.length, dir.length + " direction · " + eq.length + " équipe"),
+    el("div", { class: "kpi" }, el("span", { class: "small", text: "Taux de participation" }), el("span", { class: "v", text: expected ? Math.min(100, Math.round(rows.length / expected * 100)) + " %" : "–" }), el("label", { class: "sub", for: "effectif" }, "sur un effectif de ", eff)),
+    kpi("Score global / 100", g ?? "–", lvlLabel(g)),
+    kpi("Écart direction – équipe", both ? signed(allScore(dir) - allScore(eq)) : "–", both ? "points sur 100, direction moins équipe" : "il faut une réponse de chaque profil")));
 
   if (!rows.length) {
     body.append(el("div", { class: "card empty" }, el("p", { text: "Aucune réponse pour l'instant. Dès qu'un membre de l'équipe envoie le questionnaire, sa réponse apparaît ici : scores, écart entre direction et équipe, priorités et carte des réponses." })));
     return;
   }
 
+  // ---- ce qu'il faut retenir (sur l'ensemble des réponses)
+  const ds = DIMS.map((d, i) => ({ d, i, v: dimScore(rows, i) })).sort((a, b) => a.v - b.v);
+  const negShare = (list, i) => list.length ? list.filter(r => Number(r.reponses[i]) <= 2).length / list.length : 0;
+  const qs = ALLQ.map((t, i) => ({ t, i, n: negShare(rows, i), a: qAvg(rows, i) })).sort((a, b) => b.n - a.n || a.a - b.a || a.i - b.i);
+  const worstQ = qs[0], ties = qs.filter(o => o.n === worstQ.n && o.a === worstQ.a).length - 1;
+  const nb = ["", "une autre", "deux autres", "trois autres", "quatre autres", "cinq autres"];
+  const ins = [
+    ["Priorité n°1", ds[0].d.name + " : " + ds[0].v + " sur 100, niveau « " + lvlLabel(ds[0].v).toLowerCase() + " »."],
+    ["Point d'appui", ds[ds.length - 1].d.name + " : " + ds[ds.length - 1].v + " sur 100, la dimension la mieux notée."],
+    [ties ? "Affirmations les plus contestées" : "Affirmation la plus contestée", "« " + worstQ.t + " »" + (ties ? " et " + (nb[ties] || ties + " autres") + " à égalité" : "") + " : " + Math.round(worstQ.n * 100) + " % des répondants ne sont pas d'accord" + (ties ? ", voir la répartition ci-dessous." : ".")]
+  ];
+  if (both) {
+    const gq = ALLQ.map((t, i) => ({ t, i, gap: qAvg(dir, i) - qAvg(eq, i) })).sort((a, b) => Math.abs(b.gap) - Math.abs(a.gap))[0];
+    ins.push(["Plus grand écart de perception", Math.abs(gq.gap) < 0.5 ? "La direction et l'équipe voient les choses de la même façon, sans écart notable." : "« " + gq.t + " » : " + fmt1(qAvg(dir, gq.i)) + " pour la direction contre " + fmt1(qAvg(eq, gq.i)) + " pour l'équipe, sur 4."]);
+  } else ins.push(["Écart de perception", "Il apparaîtra dès qu'au moins une réponse de la direction et une de l'équipe auront été reçues."]);
+  if (rows.length < 3) ins.push(["Prudence", "Moins de trois réponses : ces résultats ne sont pas encore représentatifs."]);
+  body.append(el("div", { class: "card", style: "margin-bottom:16px" }, el("h3", { text: "Ce qu'il faut retenir" }), el("div", { class: "insights" }, ins.map(([h, t]) => el("div", { class: "insight" }, el("b", { text: h }), t)))));
+
+  // ---- barre d'outils
+  const pills = el("div", { class: "pillset", role: "group", "aria-label": "Filtrer par profil" }, ["Tous", "Direction", "Équipe"].map(f => el("button", { type: "button", "aria-pressed": String(filt === f), text: f + (f === "Tous" ? " (" + rows.length + ")" : f === "Direction" ? " (" + dir.length + ")" : " (" + eq.length + ")"), onclick: () => { filt = f; drawResults(body); } })));
+  const anon = el("input", { type: "checkbox", id: "anon" }); anon.checked = hideNames;
+  anon.addEventListener("change", () => { hideNames = anon.checked; try { localStorage.setItem("digivas-anon", hideNames ? "1" : "0"); } catch (e) {} drawResults(body); });
+  body.append(el("div", { class: "toolbar" }, el("div", { class: "nav" }, el("span", { class: "small", text: "Afficher :" }), pills), el("label", { class: "toggle", for: "anon" }, anon, "Masquer les noms (pour présenter à la direction)")));
+
+  // ---- dimensions
   const dims = el("div", { class: "card" }, el("h3", { text: "Scores par dimension" }));
   DIMS.forEach((d, i) => {
     const sd = dimScore(dir, i), se = dimScore(eq, i);
-    dims.append(el("div", { class: "dimrow" }, el("div", { class: "dimtop" }, el("span", { text: d.name })),
+    dims.append(el("div", { class: "dimrow" }, el("div", { class: "dimtop" }, el("span", { text: d.name }), el("span", { class: "gapnum", text: (sd != null && se != null) ? "écart " + signed(sd - se) : "" })),
       pair("Direction", sd), pair("Équipe", se)));
   });
   dims.append(el("div", { class: "legend" }, el("span", {}, el("i", { style: "background:var(--crit)" }), "À structurer, moins de 40"), el("span", {}, el("i", { style: "background:var(--warn)" }), "En construction"), el("span", {}, el("i", { style: "background:var(--good)" }), "Solide, 70 et plus")));
 
-  const qAvg = (list, i) => avg(list.map(r => Number(r.reponses[i])));
-  const weakest = ALLQ.map((t, i) => ({ t, i, a: qAvg(rows, i) })).sort((x, y) => x.a - y.a || x.i - y.i).slice(0, 5);
-  const weakList = el("ul", { class: "list" }, weakest.map(o => el("li", {}, o.t, el("span", { class: "meta", text: "Q" + String(o.i + 1).padStart(2, "0") + " · moyenne " + o.a.toFixed(1).replace(".", ",") + " sur 4" }))));
-  const right = el("div", { class: "stack" }, el("div", { class: "card" }, el("h3", { text: "Les cinq points les plus faibles" }), weakList));
-  if (dir.length && eq.length) {
+  const weakest = ALLQ.map((t, i) => ({ t, i, a: qAvg(sel, i) })).filter(o => o.a != null).sort((x, y) => x.a - y.a || x.i - y.i).slice(0, 5);
+  const right = el("div", { class: "stack" }, el("div", { class: "card" }, el("h3", { text: "Les cinq points les plus faibles" + (filt === "Tous" ? "" : " · " + filt) }),
+    sel.length ? el("ul", { class: "list" }, weakest.map(o => el("li", {}, o.t, el("span", { class: "meta", text: qn(o.i) + " · moyenne " + fmt1(o.a) + " sur 4" })))) : el("p", { class: "small", text: "Aucune réponse pour ce profil." })));
+  if (both) {
     const gaps = ALLQ.map((t, i) => ({ t, i, g: qAvg(dir, i) - qAvg(eq, i) })).filter(o => Math.abs(o.g) >= 1).sort((x, y) => Math.abs(y.g) - Math.abs(x.g)).slice(0, 5);
     right.append(el("div", { class: "card" }, el("h3", { text: "Où la direction et l'équipe voient les choses différemment" }),
-      gaps.length ? el("ul", { class: "list" }, gaps.map(o => el("li", { style: "border-color:var(--warn)" }, o.t, el("span", { class: "meta", text: "Q" + String(o.i + 1).padStart(2, "0") + " · direction " + qAvg(dir, o.i).toFixed(1).replace(".", ",") + ", équipe " + qAvg(eq, o.i).toFixed(1).replace(".", ",") + (o.g > 0 ? " · la direction est plus positive" : " · l'équipe est plus positive") }))))
+      gaps.length ? el("ul", { class: "list" }, gaps.map(o => el("li", { style: "border-color:var(--warn)" }, o.t, el("span", { class: "meta", text: qn(o.i) + " · direction " + fmt1(qAvg(dir, o.i)) + ", équipe " + fmt1(qAvg(eq, o.i)) + (o.g > 0 ? " · la direction est plus positive" : " · l'équipe est plus positive") }))))
       : el("p", { class: "small", text: "Aucun écart d'un point ou plus sur l'échelle de 1 à 4." })));
-  } else right.append(el("div", { class: "card" }, el("h3", { text: "Écart entre direction et équipe" }), el("p", { class: "small", text: "Il apparaîtra dès qu'au moins une réponse de chaque profil aura été ajoutée." })));
+  }
   body.append(el("div", { class: "grid2" }, dims, right));
 
-  const head = el("tr", {}, el("th", { class: "name", text: "Personne" }), el("th", { text: "Profil" }), ALLQ.map((_, i) => el("th", { title: ALLQ[i], text: "Q" + String(i + 1).padStart(2, "0") })), DIMS.map(d => el("th", { text: d.name.split(" ")[0] })), el("th", { text: "Global" }), el("th"));
-  const trs = rows.map(r => el("tr", {},
-    el("td", { class: "name", text: r.nom }), el("td", {}, el("span", { class: "tag", text: r.profil })),
+  // ---- répartition des réponses (barres divergentes)
+  if (sel.length) {
+    const share = (i, v) => sel.filter(r => Number(r.reponses[i]) === v).length / sel.length * 100;
+    const items = ALLQ.map((t, i) => ({ t, i, s: [1, 2, 3, 4].map(v => share(i, v)) })).sort((a, b) => (b.s[0] + b.s[1]) - (a.s[0] + a.s[1]) || a.i - b.i);
+    const seg = (w, v) => el("span", { style: "width:" + w + "%;background:var(--l" + v + ")", title: SCALE[v - 1] + " : " + Math.round(w * 2) / 2 + " %" });
+    const lik = el("div", { class: "lik" },
+      el("div", { class: "likaxis" }, el("div"), el("div", {}, el("span", { text: "← pas d'accord" }), el("span", { text: "d'accord →" })), el("div", { text: "accord" })),
+      items.map(o => el("div", { class: "likrow" },
+        el("div", { class: "lt" }, el("span", { class: "qn", text: qn(o.i) }), o.t),
+        el("div", { class: "likbar", role: "img", "aria-label": o.t + " : " + Math.round(o.s[2] + o.s[3]) + " % d'accord" },
+          el("div", { class: "neg" }, seg(o.s[0], 1), seg(o.s[1], 2)),
+          el("div", { class: "pos" }, seg(o.s[2], 3), seg(o.s[3], 4))),
+        el("div", { class: "likpct", text: Math.round(o.s[2] + o.s[3]) + " %" }))));
+    body.append(el("div", { class: "card", style: "margin-bottom:16px" },
+      el("h3", { text: "Répartition des réponses, de la plus contestée à la plus partagée" + (filt === "Tous" ? "" : " · " + filt) }),
+      el("div", { class: "legend" }, SCALE.map((l, k) => el("span", {}, el("i", { style: "background:var(--l" + (k + 1) + ")" }), l))),
+      lik));
+  }
+
+  // ---- carte des réponses
+  const who = (r, k) => hideNames ? r.profil + " " + (k + 1) : r.nom;
+  const head = el("tr", {}, el("th", { class: "name", text: hideNames ? "Répondant" : "Personne" }), el("th", { text: "Profil" }), ALLQ.map((_, i) => el("th", { title: ALLQ[i], text: qn(i) })), DIMS.map((d, k) => el("th", { title: d.name, text: "D" + (k + 1) })), el("th", { text: "Global" }), hideNames ? null : el("th"));
+  const counters = { Direction: 0, "Équipe": 0 };
+  const trs = sel.map(r => el("tr", {},
+    el("td", { class: "name", text: who(r, counters[r.profil]++) }), el("td", {}, el("span", { class: "tag", text: r.profil })),
     nums(r).map(v => el("td", { class: "c" + v, text: v })),
     DIMS.map((_, i) => el("td", { class: "num", text: scorePct(nums(r).slice(i * 5, i * 5 + 5)) })),
     el("td", { class: "num", style: "font-weight:600", text: scorePct(nums(r)) }),
-    el("td", {}, delBtn(r))));
-  const avgRow = el("tr", {}, el("td", { class: "name", style: "font-weight:600", text: "Moyenne" }), el("td"), ALLQ.map((_, i) => el("td", { class: "num", text: qAvg(rows, i).toFixed(1).replace(".", ",") })), DIMS.map((_, i) => el("td", { class: "num", text: dimScore(rows, i) })), el("td", { class: "num", style: "font-weight:600", text: allScore(rows) }), el("td"));
-  const legend = el("div", { class: "qlegend" }, ALLQ.map((t, i) => el("div", {}, el("span", { class: "qn", text: "Q" + String(i + 1).padStart(2, "0") }), t)));
-  body.append(el("div", { class: "card", style: "margin-bottom:16px" }, el("h3", { text: "Carte des réponses" }),
-    el("div", { class: "legend" }, ["Pas du tout", "Plutôt non", "Plutôt oui", "Tout à fait"].map((l, i) => el("span", {}, el("i", { style: "background:var(--h" + (i + 1) + ")" }), (i + 1) + " " + l))),
+    hideNames ? null : el("td", {}, delBtn(r))));
+  const avgRow = sel.length ? el("tr", {}, el("td", { class: "name", style: "font-weight:600", text: "Moyenne" }), el("td"), ALLQ.map((_, i) => el("td", { class: "num", text: fmt1(qAvg(sel, i)) })), DIMS.map((_, i) => el("td", { class: "num", text: dimScore(sel, i) })), el("td", { class: "num", style: "font-weight:600", text: allScore(sel) }), hideNames ? null : el("td")) : null;
+  const legend = el("div", { class: "qlegend" },
+    DIMS.map((d, k) => el("div", {}, el("span", { class: "qn", text: "D" + (k + 1) }), d.name)),
+    ALLQ.map((t, i) => el("div", {}, el("span", { class: "qn", text: qn(i) }), t)));
+  body.append(el("div", { class: "card", style: "margin-bottom:16px" }, el("h3", { text: "Carte des réponses" + (filt === "Tous" ? "" : " · " + filt) }),
+    el("div", { class: "legend" }, SCALE.map((l, k) => el("span", {}, el("i", { style: "background:var(--h" + (k + 1) + ")" }), (k + 1) + " " + l))),
     el("div", { class: "tablewrap" }, el("table", {}, el("thead", {}, head), el("tbody", {}, trs, avgRow))), legend));
 
-  const coms = rows.filter(r => r.commentaire);
+  // ---- commentaires
+  const coms = sel.filter(r => r.commentaire);
   body.append(el("div", { class: "card", style: "margin-bottom:16px" }, el("h3", { text: "Ce qui ferait gagner du temps, selon chacun" }),
-    coms.length ? el("div", { class: "comments" }, coms.map(r => el("div", { class: "comment" }, el("b", { text: r.nom + " · " + r.profil }), r.commentaire))) : el("p", { class: "small", text: "Aucun commentaire reçu." })));
+    coms.length ? el("div", { class: "comments" }, coms.map(r => el("div", { class: "comment" }, el("b", { text: hideNames ? r.profil : r.nom + " · " + r.profil }), r.commentaire))) : el("p", { class: "small", text: "Aucun commentaire reçu." })));
   if (dupes) body.append(el("p", { class: "small", text: dupes + (dupes > 1 ? " réponses en double ont été ignorées" : " réponse en double a été ignorée") + " : seule la plus récente de chaque personne est prise en compte." }));
 }
 
-function kpi(label, v) { return el("div", { class: "kpi" }, el("span", { class: "small", text: label }), el("span", { class: "v", text: v })); }
+function kpi(label, v, sub) { return el("div", { class: "kpi" }, el("span", { class: "small", text: label }), el("span", { class: "v", text: v }), sub ? el("span", { class: "sub", text: sub }) : null); }
 function pair(label, s) {
   return el("div", { class: "pair" }, el("span", { text: label }),
     el("div", { class: "btrack" }, el("div", { class: "bfill", style: "width:" + (s ?? 0) + "%;background:" + color(s) })),
