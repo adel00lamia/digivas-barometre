@@ -170,8 +170,8 @@ const DIMS = [
 ];
 const ALLQ = DIMS.flatMap(d => d.qs);
 const SCALE = ["Pas du tout", "Plutôt non", "Plutôt oui", "Tout à fait"];
-const SB_URL = "https://jecydmxekdorycgfwtwy.supabase.co";
-const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplY3lkbXhla2RvcnljZ2Z3dHd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNjIzMzgsImV4cCI6MjEwNzczODMzOH0.YLQ13bAlEEgAHgMbGohgTXMv6SRRy1pN7TCXT-8Yfi8"; // clé publique : elle n'autorise que l'envoi de réponses
+const SB_URL = "https://kqvicmdjnahbccsxzwex.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxdmljbWRqbmFoYmNjc3h6d2V4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM3Mzk5MzQsImV4cCI6MjEwOTMxNTkzNH0.SY-auK5eqg5ecJDgXP50LvPMobip46V8pVPCXY1EtrE"; // clé publique : elle n'autorise que l'envoi de réponses
 const MISSION = (new URLSearchParams(location.search).get("m") || "swisse-travel").toLowerCase();
 async function sb(path, body, prefer) {
   const r = await fetch(SB_URL + "/rest/v1/" + path, { method: "POST", headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY, "Content-Type": "application/json", "Prefer": prefer || "return=minimal" }, body: JSON.stringify(body) });
