@@ -440,13 +440,15 @@ const denied = x => x.status === 401 || /acces_refuse/.test(x.message || "");
 function renderGate(msg) {
   app.textContent = "";
   const err = el("p", { class: "error", role: "alert", text: msg || "" });
-  const inp = el("input", { type: "password", id: "code", autocomplete: "current-password", placeholder: "Code d'accès" });
+  const inp = el("input", { type: "password", id: "code", autocomplete: "current-password", autocapitalize: "none", autocorrect: "off", spellcheck: "false", placeholder: "ex. mot-mot-mot-123" });
+  const show = el("input", { type: "checkbox", id: "voir" });
+  show.addEventListener("change", () => { inp.type = show.checked ? "text" : "password"; inp.focus(); });
   const btn = el("button", { class: "primary", text: "Ouvrir" });
   const go = async () => {
-    const c = inp.value.trim(); if (!c) { err.textContent = "Saisissez le code d'accès."; return; }
+    const c = inp.value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase().replace(/[\s_–—]+/g, "-"); if (!c) { err.textContent = "Saisissez le code d'accès."; return; }
     btn.disabled = true; btn.textContent = "Vérification…";
     try { await load(c); code = c; try { sessionStorage.setItem("digivas-code", c); } catch (e) {} renderConsultant(); }
-    catch (x) { btn.disabled = false; btn.textContent = "Ouvrir"; err.textContent = denied(x) ? "Code incorrect." : "Connexion impossible. Vérifiez votre connexion internet."; inp.select(); }
+    catch (x) { btn.disabled = false; btn.textContent = "Ouvrir"; err.textContent = denied(x) ? "Code incorrect. Cochez « Afficher le code » pour vérifier ce qui a été saisi : trois mots et un nombre, séparés par des tirets." : "Connexion impossible. Vérifiez votre connexion internet."; inp.select(); }
   };
   btn.addEventListener("click", go);
   inp.addEventListener("keydown", e => { if (e.key === "Enter") go(); });
@@ -454,8 +456,8 @@ function renderGate(msg) {
     el("div", { class: "eyebrow", text: "DIGIVAS · Cabinet de conseil RH" }),
     el("h1", { text: "Espace DIGIVAS" }),
     el("div", { class: "card" },
-      el("div", { class: "field" }, el("label", { for: "code", text: "Code d'accès aux résultats" }), inp),
-      el("p", { class: "small", text: "Le code est vérifié par le serveur. Sans lui, aucune réponse n'est accessible." }),
+      el("div", { class: "field" }, el("label", { for: "code", text: "Code d'accès aux résultats" }), inp, el("label", { class: "toggle", for: "voir" }, show, "Afficher le code")),
+      el("p", { class: "small", text: "Le code est vérifié par le serveur. Les majuscules et les espaces ajoutés par le clavier sont corrigés automatiquement." }),
       err,
       el("div", { class: "nav" }, el("a", { href: "#", class: "btn ghost", text: "Retour au questionnaire" }), btn))));
   inp.focus();
