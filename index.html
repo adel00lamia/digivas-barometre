@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Baromètre Swisse Travel</title>
+<title>Baromètre Swisse Travel · DIGIVAS</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -226,6 +226,19 @@ select.st-en_cours { border-color: var(--warn); } select.st-remis { border-color
 @media (max-width: 860px) { .gov { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 .gov > div { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 4px; }
 .gov > div.past { opacity: .6; }
+.iapanel { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 12px; padding: 12px 16px; margin-bottom: 14px; display: grid; gap: 10px; }
+.iapanel[open] { padding-bottom: 16px; }
+.iapanel summary { cursor: pointer; list-style: none; }
+.iapanel summary::-webkit-details-marker { display: none; }
+.iapanel summary::before { content: "▸ "; color: var(--accent); }
+.iapanel[open] summary::before { content: "▾ "; }
+.iapanel textarea, .card textarea { width: 100%; font: inherit; font-size: 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--ink); resize: vertical; box-sizing: border-box; }
+.iapanel .nav { justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.iapanel button { padding: 8px 12px; font-size: 13px; }
+.iapanel button:disabled, .card button:disabled { opacity: .5; cursor: not-allowed; }
+.box-inline { border: 1px solid var(--line); border-left: 3px solid var(--warn); border-radius: 10px; padding: 12px 14px; display: grid; gap: 6px; color: var(--ink); }
+.box-inline ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.card select { font: inherit; font-size: 14px; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); max-width: 100%; }
 /* doc-start */
 .doc { background: #ffffff; color: #011a30; font-family: "Open Sans", Calibri, Arial, sans-serif; font-size: 13px; line-height: 1.55; padding: 40px 48px; border: 1px solid #dde3ea; border-radius: 6px; box-shadow: 0 8px 30px rgba(1,26,48,.08); outline: none; }
 .doc .dh { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-bottom: 12px; border-bottom: 3px solid #79162d; }
@@ -363,7 +376,7 @@ function renderRespondent() {
   else if (state.step <= 4) renderDim(wrap, state.step - 1);
   else if (state.step === 5) renderComment(wrap);
   else renderThanks(wrap);
-  wrap.append(el("div", { class: "footer-link" }, el("span", { class: "muted", text: "Questionnaire proposé par Lamia Adel, consultante RH · " }), el("a", { href: "#espace-digivas", text: "Espace consultante" })));
+  wrap.append(el("div", { class: "footer-link" }, el("span", { class: "muted", text: "Questionnaire proposé par Lamia Adel, consultante RH chez DIGIVAS · " }), el("a", { href: "#espace-digivas", text: "Espace consultante" })));
   app.append(wrap);
   window.scrollTo(0, 0);
 }
@@ -887,7 +900,7 @@ const LIVS = [
   { k: "diagnostic", grp: "plan", ph: 1, w: 2, a: 9, t: "Rapport de diagnostic", d: "Charge de travail par activité, zones sans responsable, écarts de conformité et priorités chiffrées.", auto: true },
   { k: "saison", grp: "plan", ph: 1, w: 3, a: 8, t: "Plan de saison Omra Ramadan 2027", d: "Planning, congés et renforts saisonniers, arrêtés avant le 27 novembre 2026." },
   { k: "organigramme", grp: "plan", ph: 2, w: 3, a: 10, t: "Organigramme cible", d: "Les pôles, leurs responsables et le référent outils numériques, avec deux scénarios comparés." },
-  { k: "fiche-role", grp: "plan", ph: 2, w: 4, a: 11, t: "Fiches de rôle", d: "Mission, responsabilités, ce qui change avec les outils IA et un indicateur, pour chaque poste." },
+  { k: "fiche-role", grp: "plan", ph: 2, w: 4, a: 11, t: "Fiches de rôle", d: "Sept fiches de poste pré-rédigées pour l'agence, de la direction à l'accompagnateur, et un modèle vierge." },
   { k: "raci", grp: "plan", ph: 2, w: 4, a: 12, t: "Matrice RACI et délégations", d: "Un responsable unique et un suppléant par processus, et ce que chacun peut décider seul." },
   { k: "parcours", grp: "plan", ph: 2, w: 5, a: 14, t: "Parcours client et passations", d: "De la demande au retour du pèlerin : responsable, déclencheur et délai à chaque étape." },
   { k: "charte-ia", grp: "plan", ph: 3, w: 7, a: 17, t: "Charte IA et données", d: "Ce qui peut être confié à un outil, ce qui reste dans Travelife et qui valide avant envoi." },
@@ -917,14 +930,15 @@ const F = (hint, w) => '<span class="fill"' + (w ? ' style="min-width:' + w + '"
 const T = (head, rows, cls) => '<table class="' + (cls || "") + '"><thead><tr>' + head.map(h => "<th>" + h + "</th>").join("") + "</tr></thead><tbody>" + rows.map(r => "<tr>" + r.map(c => "<td>" + c + "</td>").join("") + "</tr>").join("") + "</tbody></table>";
 const blank = (n, cols) => Array.from({ length: n }, () => Array(cols).fill("&nbsp;"));
 const H2 = (n, t, lead) => '<h2><span class="sn">' + String(n).padStart(2, "0") + "</span>" + t + "</h2>" + (lead ? '<p class="lead2">' + lead + "</p>" : "");
+const H3 = (n, t, lead) => "<h3>" + t + "</h3>" + (lead ? '<p class="lead2">' + lead + "</p>" : "");
 const BOX = (t, body) => '<div class="box"><b>' + t + "</b>" + body + "</div>";
 const SIGN = (a, b) => '<table class="sign"><tr><td>' + a + "<br><br>Nom : " + F("") + "<br>Date et signature :</td><td>" + b + "<br><br>Nom : " + F("") + "<br>Date et signature :</td></tr></table>";
 
 function docShell(lv, lead, inner) {
-  return '<header class="dh"><img src="' + LOGO + '" alt="Swisse Travel"><div class="dhr"><div class="dk">Lamia Adel · Consultante RH</div><div>' + (lv.grp === "plan" ? "Livrable " + String(lv.n).padStart(2, "0") + " sur 12" : "Outil de mission") + (lv.a ? " · action " + lv.a + " du plan" : "") + (lv.recur ? " · chaque semaine" : " · échéance " + dshort(weekEnd(lv.w))) + "</div></div></header>" +
+  return '<header class="dh"><img src="' + LOGO + '" alt="Swisse Travel"><div class="dhr"><div class="dk">DIGIVAS · Conseil RH</div><div>Lamia Adel, consultante RH</div><div>' + (lv.grp === "plan" ? "Livrable " + String(lv.n).padStart(2, "0") + " sur 12" : "Outil de mission") + (lv.a ? " · action " + lv.a + " du plan" : "") + (lv.recur ? " · chaque semaine" : " · échéance " + dshort(weekEnd(lv.w))) + "</div></div></header>" +
     '<div class="dtitle"><div class="eyb">' + PHASES[lv.ph] + "</div><h1>" + lv.t + '</h1><p class="lead">' + lead + "</p></div>" +
-    '<table class="meta"><tr><td>Client</td><td>Swisse Travel, Salé</td><td>Version</td><td>' + F("v1") + "</td></tr><tr><td>Préparé par</td><td>Lamia Adel, consultante RH</td><td>Date</td><td>" + dfmt(new Date()) + "</td></tr></table>" +
-    inner + '<footer class="df">Lamia Adel, consultante RH · Mission RH Swisse Travel · Document de travail confidentiel</footer>';
+    '<table class="meta"><tr><td>Client</td><td>Swisse Travel, Salé</td><td>Version</td><td>' + F("v1") + "</td></tr><tr><td>Préparé par</td><td>Lamia Adel, consultante RH · DIGIVAS</td><td>Date</td><td>" + dfmt(new Date()) + "</td></tr></table>" +
+    inner + '<footer class="df">DIGIVAS · Lamia Adel, consultante RH · Mission RH Swisse Travel · Document de travail confidentiel</footer>';
 }
 
 function baroBlock(S, n0) {
@@ -954,12 +968,85 @@ function recoTable(S, max) {
   return T(["Priorité", "Constat", "Recommandation", "Action du plan", "Échéance"], R.map(o => ['<span class="pt ' + prioLabel(o.prio)[1] + '">' + prioLabel(o.prio)[0] + "</span>", "<b>" + qn(o.i) + "</b> " + esc(o.t) + '<br><span class="note">' + esc(constat(o)) + "</span>", esc(o.r), "n° " + o.act + " · " + esc(ACTIONS[o.act][1]), ACTIONS[o.act][0]]));
 }
 
+const POSTES = [
+  { t: "Direction de l'agence", pole: "Direction", rat: "Associés ou gérance", sup: "Responsable des opérations",
+    m: "Fixer le cap commercial et opérationnel de l'agence, décider de ce qui dépasse les délégations et garantir que chaque départ se passe comme promis.",
+    r: [["Arrêter le calendrier des départs, les prix et les capacités de chaque saison", "Un programme publié et tenu, avec une marge connue par départ", "25 %"], ["Négocier avec les compagnies aériennes, les hôtels et les prestataires en Arabie saoudite", "Des contrats signés avant l'ouverture des ventes", "20 %"], ["Décider des remises, échéanciers et remboursements au-delà des délégations", "Une décision écrite sous 48 heures", "10 %"], ["Animer le point d'équipe du lundi et la revue mensuelle", "Le tableau de bord présenté et commenté chaque mois", "20 %"], ["Recruter, accueillir et évaluer l'équipe et les saisonniers", "Les renforts en poste et formés avant le premier départ", "25 %"]],
+    hors: "Les réponses aux demandes WhatsApp courantes, la saisie des dossiers et l'encaissement, qui relèvent des pôles.",
+    dec: [["Prix de vente et lancement d'une offre", "Dans le budget de la saison", "Associés"], ["Recrutement d'un renfort saisonnier", "Dans l'effectif prévu au plan de saison", "Associés"]],
+    ia: "La direction reçoit chaque mois un tableau de bord préparé à partir des données de Travelife. Elle valide la charte IA et nomme le référent outils numériques.",
+    ind: [["Taux de remplissage des départs", "Cible fixée par la direction", "Travelife"], ["Réclamations clients par mois", "En baisse d'une saison à l'autre", "Registre des réclamations"]],
+    comp: ["Négociation avec les fournisseurs", "Pilotage par les indicateurs", "Management d'une petite équipe"] },
+  { t: "Conseiller·ère voyages Omra et Hajj", pole: "Pôle commercial", rat: "Direction", sup: "Autre conseiller·ère",
+    m: "Transformer les demandes des clients en réservations confirmées, rapidement et sans erreur, puis transmettre un dossier complet aux opérations.",
+    r: [["Répondre aux demandes WhatsApp, téléphone et site pendant sa permanence", "Première réponse en moins de 15 minutes", "35 %"], ["Conseiller le client et envoyer un devis clair", "Devis envoyé sous 24 heures", "25 %"], ["Enregistrer la réservation et encaisser l'acompte", "Dossier créé dans Travelife le jour même, reçu remis", "15 %"], ["Transmettre le dossier aux opérations avec la fiche de passation", "Aucune pièce manquante à la passation", "10 %"], ["Recueillir l'avis du client au retour et traiter les premières réclamations", "Message de suivi à J+7", "15 %"]],
+    hors: "La constitution du dossier visa, la réservation des hôtels et le contrôle à J-15, qui relèvent des opérations.",
+    dec: [["Remise commerciale", F("jusqu'à ___ DH ou ___ %"), "Direction"], ["Échéancier de paiement", F("___ échéances, solde à J-___"), "Direction"]],
+    ia: "Les réponses aux questions fréquentes partent de réponses types préparées avec l'IA et validées par la direction. Chaque réponse est relue avant envoi, et les prix et dates sont vérifiés dans Travelife.",
+    ind: [["Délai médian de première réponse", "Moins de 15 minutes", "WhatsApp Business"], ["Taux de transformation des demandes", "Cible fixée par la direction", "Travelife"]],
+    comp: ["Connaissance des programmes Omra et Hajj", "Relation client écrite et orale, en arabe et en français", "Maîtrise de Travelife"] },
+  { t: "Responsable des opérations et des dossiers pèlerins", pole: "Pôle opérations", rat: "Direction", sup: "Agent·e billetterie et hébergement",
+    m: "Garantir que chaque pèlerin part avec un dossier complet, un visa, un billet et une chambre confirmés, et que chaque groupe est accompagné.",
+    r: [["Réceptionner les dossiers transmis par les conseillers et réclamer les pièces manquantes", "Pièces complètes à J-45", "25 %"], ["Déposer les demandes de visa et suivre leur obtention", "Visas obtenus à J-30", "20 %"], ["Organiser le contrôle du dossier à J-15 par une autre personne", "95 % des dossiers complets à J-15", "15 %"], ["Préparer et animer la réunion pré-départ", "Réunion tenue à J-7 pour chaque groupe", "15 %"], ["Transmettre le groupe à l'accompagnateur et suivre le séjour", "Ligne d'urgence active et compte rendu quotidien", "25 %"]],
+    hors: "La vente, le devis et l'encaissement, qui relèvent du pôle commercial et de la caisse.",
+    dec: [["Réaffectation de chambres ou de places dans un même départ", "Sans surcoût", "Direction"], ["Report d'un pèlerin sur un autre départ", "Avec l'accord écrit du client et sans surcoût", "Direction"]],
+    ia: "Les rappels automatiques signalent les pièces manquantes et les échéances. Les consignes de voyage et les messages aux groupes sont préparés avec l'IA puis relus.",
+    ind: [["Dossiers complets à J-15", "95 %", "Liste de vérification J-15"], ["Incidents pendant le séjour", "En baisse d'une saison à l'autre", "Comptes rendus d'accompagnement"]],
+    comp: ["Procédures de visa Omra et Hajj", "Organisation et rigueur documentaire", "Gestion des urgences à distance"] },
+  { t: "Agent·e billetterie et hébergement", pole: "Pôle opérations", rat: "Responsable des opérations", sup: "Responsable des opérations",
+    m: "Réserver et émettre les billets et les chambres de chaque départ, aux bonnes dates et aux bons noms, au meilleur coût prévu.",
+    r: [["Réserver les blocs de sièges et de chambres selon le calendrier de saison", "Capacités confirmées avant l'ouverture des ventes", "25 %"], ["Émettre les billets en vérifiant la concordance avec les passeports", "Zéro erreur de nom ou de date", "30 %"], ["Établir les listes de chambres et les transmettre aux hôtels", "Liste envoyée à J-10", "20 %"], ["Suivre les options et les dates limites des fournisseurs", "Aucune option perdue", "15 %"], ["Tenir à jour les disponibilités dans Travelife", "Places restantes justes chaque lundi", "10 %"]],
+    hors: "Le choix des fournisseurs et la négociation des contrats, qui relèvent de la direction.",
+    dec: [["Changement de vol ou de chambre à la demande d'un client", "Sans surcoût pour l'agence", "Responsable des opérations"]],
+    ia: "Les contrôles de concordance entre passeports et billets s'appuient sur des listes générées par Travelife. Aucune copie de passeport n'est saisie dans un outil d'IA.",
+    ind: [["Erreurs d'émission", "Zéro par départ", "Contrôle J-15"], ["Options perdues", "Zéro par saison", "Suivi des options"]],
+    comp: ["Systèmes de réservation aérienne et hôtelière", "Précision et vérification", "Relation fournisseurs"] },
+  { t: "Chargé·e de caisse et de comptabilité", pole: "Pôle administration", rat: "Direction", sup: F("à désigner"),
+    m: "Encaisser et tracer chaque paiement, suivre les soldes et les échéanciers, et préparer les éléments comptables et sociaux de l'agence.",
+    r: [["Encaisser les acomptes et les soldes et remettre un reçu numéroté", "100 % des paiements tracés le jour même", "30 %"], ["Suivre les échéanciers et relancer les soldes", "Soldes encaissés à J-20", "25 %"], ["Préparer les remboursements validés", "Remboursement exécuté sous 7 jours après validation", "10 %"], ["Rapprocher la caisse, la banque et Travelife chaque semaine", "Aucun écart non expliqué", "20 %"], ["Préparer les éléments de paie et les déclarations sociales", "Transmis à l'expert-comptable dans les délais", "15 %"]],
+    hors: "L'accord de remises ou de remboursements, qui relève des délégations écrites.",
+    dec: [["Encaissement en espèces", F("jusqu'à ___ DH par opération"), "Direction"], ["Report d'une échéance", F("jusqu'à ___ jours"), "Direction"]],
+    ia: "Les relances de soldes partent de modèles de messages préparés avec l'IA. Aucune donnée bancaire n'est saisie dans un outil d'IA.",
+    ind: [["Soldes encaissés à J-20", "100 %", "Travelife"], ["Écarts de caisse non expliqués", "Zéro", "Rapprochement hebdomadaire"]],
+    comp: ["Comptabilité et caisse", "Rigueur et confidentialité", "Notions de paie et de déclarations sociales"] },
+  { t: "Chargé·e de communication digitale et référent·e outils numériques", pole: "Pôle commercial, rôle transverse", rat: "Direction", sup: "Conseiller·ère voyages",
+    m: "Tenir à jour le catalogue en ligne, animer les réseaux sociaux et aider l'équipe à bien utiliser les outils numériques et l'IA.",
+    r: [["Publier et mettre à jour les offres sur le site et les réseaux", "Catalogue conforme à Travelife chaque lundi", "30 %"], ["Animer les réseaux sociaux selon un calendrier éditorial", "Calendrier tenu chaque semaine", "25 %"], ["Tenir la bibliothèque de réponses types et la charte IA", "Réponses types revues chaque mois", "15 %"], ["Accompagner les collègues sur les outils et repérer les besoins de formation", "Aucune demande d'aide sans réponse sous 48 heures", "15 %"], ["Suivre les statistiques des réseaux et du site", "Rapport mensuel au point d'équipe", "15 %"]],
+    hors: "La fixation des prix et le lancement des offres, qui relèvent de la direction.",
+    dec: [["Publication d'un contenu conforme au calendrier", "Sans prix nouveau ni promesse commerciale", "Direction"]],
+    ia: "Les fiches offres, les traductions et les visuels sont préparés avec l'IA, relus par une deuxième personne et vérifiés dans Travelife avant publication.",
+    ind: [["Offres à jour sur le site", "100 % chaque lundi", "Revue du catalogue"], ["Demandes générées par les réseaux", "En hausse d'une saison à l'autre", "WhatsApp Business et site"]],
+    comp: ["Rédaction et réseaux sociaux", "Outils d'IA et bureautique", "Pédagogie auprès des collègues"] },
+  { t: "Accompagnateur·rice de groupe", pole: "Pôle opérations, saisonnier", rat: "Responsable des opérations", sup: "Autre accompagnateur·rice",
+    m: "Guider et protéger le groupe pendant tout le séjour, du départ au retour, et rendre compte chaque jour à l'agence.",
+    r: [["Participer à la réunion pré-départ et connaître chaque pèlerin", "Liste du groupe et besoins particuliers connus", "10 %"], ["Encadrer le groupe aux aéroports, aux hôtels et pendant les rites", "Aucun pèlerin laissé sans réponse", "50 %"], ["Gérer les imprévus en lien avec la ligne d'urgence", "Incident signalé à l'agence dans l'heure", "20 %"], ["Envoyer un compte rendu quotidien", "Un message chaque soir", "10 %"], ["Remonter les avis et les incidents au retour", "Compte rendu remis sous 3 jours", "10 %"]],
+    hors: "Les changements de prestations payantes et les remboursements, qui relèvent de l'agence.",
+    dec: [["Dépense d'urgence pour un pèlerin", F("jusqu'à ___ DH, justificatif à l'appui"), "Responsable des opérations"]],
+    ia: "Les consignes et les messages au groupe sont préparés par l'agence. L'accompagnateur ne partage aucune donnée de pèlerin dans un outil d'IA.",
+    ind: [["Comptes rendus quotidiens envoyés", "100 % des jours", "Groupe WhatsApp de l'agence"], ["Satisfaction du groupe", "Cible fixée par la direction", "Avis clients au retour"]],
+    comp: ["Connaissance des rites et des lieux", "Calme et sens du service", "Gestion de groupe"] }
+];
+
+function ficheHTML(p, i) {
+  return '<div class="pb"></div>' + '<h2><span class="sn">' + String(i + 2).padStart(2, "0") + "</span>" + p.t + "</h2>" +
+    '<p class="lead2">Proposition à valider avec le titulaire, puis à signer.</p>' +
+    '<table class="meta"><tr><td>Pôle</td><td>' + p.pole + "</td><td>Rattachement</td><td>" + p.rat + "</td></tr><tr><td>Titulaire</td><td>" + F("") + "</td><td>Suppléant·e</td><td>" + p.sup + "</td></tr></table>" +
+    "<h3>Mission du poste</h3><p>" + p.m + "</p>" +
+    "<h3>Responsabilités principales</h3>" + T(["Responsabilité", "Résultat attendu", "Part du temps"], p.r) +
+    "<h3>Ce qui ne relève pas du poste</h3><p>" + p.hors + "</p>" +
+    "<h3>Ce que la personne décide seule</h3>" + T(["Décision", "Limite", "Au-delà, qui décide"], p.dec) +
+    "<h3>Ce qui change avec les nouveaux outils</h3><p>" + p.ia + "</p>" +
+    "<h3>Indicateurs</h3>" + T(["Indicateur", "Cible", "Source"], p.ind) +
+    "<h3>Compétences clés</h3><ul>" + p.comp.map(c => "<li>" + c + "</li>").join("") + "</ul>" +
+    SIGN("Titulaire du poste", "Direction de Swisse Travel");
+}
+
 const TPL = {
   invitation: lv => docShell(lv, "Deux versions du message qui accompagne le lien du baromètre : l'une pour WhatsApp, l'autre pour l'e-mail. La direction l'envoie elle-même, ce qui donne du poids à la démarche.",
     H2(1, "Version WhatsApp", "À envoyer dans le groupe de l'équipe, ou individuellement.") +
-    '<div class="msg">Bonjour à tous,<br><br>Nous lançons avec Lamia Adel, consultante RH, un travail sur l\'organisation de l\'agence, pour que chacun sache clairement ce qu\'il porte et que la saison Omra Ramadan se passe sereinement.<br><br>La première étape est un court questionnaire de 5 minutes : <b>https://digivas-barometre.vercel.app</b><br><br>Il n\'y a pas de bonne ou de mauvaise réponse. Vos réponses sont lues uniquement par la consultante et présentées de façon regroupée. Merci de le remplir avant le ' + F("vendredi 13 novembre") + ".<br><br>" + F("Prénom de la personne de la direction") + "</div>" +
+    '<div class="msg">Bonjour à tous,<br><br>Nous lançons avec Lamia Adel, consultante RH chez DIGIVAS, un travail sur l\'organisation de l\'agence, pour que chacun sache clairement ce qu\'il porte et que la saison Omra Ramadan se passe sereinement.<br><br>La première étape est un court questionnaire de 5 minutes : <b>https://digivas-barometre.vercel.app</b><br><br>Il n\'y a pas de bonne ou de mauvaise réponse. Vos réponses sont lues uniquement par la consultante et présentées de façon regroupée. Merci de le remplir avant le ' + F("vendredi 13 novembre") + ".<br><br>" + F("Prénom de la personne de la direction") + "</div>" +
     H2(2, "Version e-mail") +
-    '<div class="msg"><b>Objet :</b> 5 minutes pour améliorer notre organisation<br><br>Bonjour ' + F("prénom") + ",<br><br>Swisse Travel s'équipe de nouveaux outils et se prépare à une saison Omra Ramadan chargée. Pour que ces changements facilitent vraiment le travail de chacun, nous avons demandé à Lamia Adel, consultante RH, de nous accompagner pendant douze semaines.<br><br>Nous commençons par écouter l'équipe. Je vous invite à remplir le baromètre de l'organisation, qui prend environ cinq minutes : https://digivas-barometre.vercel.app<br><br>Vos réponses individuelles ne sont lues que par la consultante. La direction en reçoit une synthèse regroupée, sans les noms. Chacun aura ensuite un entretien de 45 minutes avec Lamia Adel.<br><br>Merci de répondre avant le " + F("vendredi 13 novembre") + ".<br><br>Bien cordialement,<br>" + F("Nom, fonction") + "</div>" +
+    '<div class="msg"><b>Objet :</b> 5 minutes pour améliorer notre organisation<br><br>Bonjour ' + F("prénom") + ",<br><br>Swisse Travel s'équipe de nouveaux outils et se prépare à une saison Omra Ramadan chargée. Pour que ces changements facilitent vraiment le travail de chacun, nous avons demandé à Lamia Adel, consultante RH chez DIGIVAS, de nous accompagner pendant douze semaines.<br><br>Nous commençons par écouter l'équipe. Je vous invite à remplir le baromètre de l'organisation, qui prend environ cinq minutes : https://digivas-barometre.vercel.app<br><br>Vos réponses individuelles ne sont lues que par la consultante. La direction en reçoit une synthèse regroupée, sans les noms. Chacun aura ensuite un entretien de 45 minutes avec Lamia Adel.<br><br>Merci de répondre avant le " + F("vendredi 13 novembre") + ".<br><br>Bien cordialement,<br>" + F("Nom, fonction") + "</div>" +
     H2(3, "Relance", "Deux jours avant la date limite, aux personnes qui n'ont pas encore répondu.") +
     '<div class="msg">Petit rappel : il reste deux jours pour remplir le baromètre de l\'organisation (5 minutes) : https://digivas-barometre.vercel.app. Chaque avis compte, merci à ceux qui l\'ont déjà fait.</div>' +
     BOX("Bonnes pratiques", "<ul><li>Envoyer le message un mardi ou un mercredi matin, hors des pics de demandes.</li><li>Suivre la participation dans l'Espace consultante et ne relancer qu'une seule fois.</li><li>Ne jamais demander à quelqu'un s'il a répondu : la confidentialité fait la qualité des réponses.</li></ul>")),
@@ -1028,7 +1115,7 @@ const TPL = {
     H2(3, "Renforts saisonniers") + T(["Profil", "Mission", "Période", "Source de recrutement", "Formation prévue", "Statut"], [["Conseiller·ère en renfort", "Demandes WhatsApp et devis", "&nbsp;", "&nbsp;", "Atelier 1 et guide d'accueil", "&nbsp;"], ["Assistant·e dossiers", "Pièces, visas, contrôle J-15", "&nbsp;", "&nbsp;", "&nbsp;", "&nbsp;"], ["Accompagnateur·rice", "Encadrement des groupes", "&nbsp;", "&nbsp;", "&nbsp;", "&nbsp;"]]) +
     H2(4, "Permanences élargies") + "<p>Pendant les semaines de départ, la permanence WhatsApp passe à " + F("deux titulaires") + " de " + F("9 h à 21 h") + ", et une ligne d'urgence est confiée à " + F("nom") + " pour les groupes en voyage.</p>" +
     H2(5, "Rétroplanning jusqu'au premier départ") + T(["Échéance", "Étape", "Responsable", "Fait"], [["20 novembre", "Liste des départs et effectifs prévus", "Direction", "☐"], ["27 novembre", "Plan de saison validé : congés, renforts, permanences", "Direction", "☐"], ["11 décembre", "Renforts recrutés ou confirmés", "Direction", "☐"], ["18 décembre", "Réponses types et réunion pré-départ préparées", "Équipe", "☐"], ["8 janvier", "Renforts formés avec le guide d'accueil", "Consultante", "☐"], ["9 janvier", "Contrôle J-15 du premier départ", "Responsable opérations", "☐"], ["17 janvier", "Réunion pré-départ avec les pèlerins", "Responsable opérations", "☐"], ["24 janvier", "Premier départ Omra Ramadan", "Accompagnateur", "☐"], ["29 janvier", "Retour d'expérience du premier départ", "Direction et consultante", "☐"]]) +
-    BOX("Validation", SIGN("Direction de Swisse Travel", "Lamia Adel, consultante RH"))),
+    BOX("Validation", SIGN("Direction de Swisse Travel", "Lamia Adel, consultante RH · DIGIVAS"))),
 
   organigramme: lv => {
     const box = (t, s, cls) => '<div class="ob ' + (cls || "") + '"><b>' + t + "</b><span>" + s + "</span>" + F("nom") + "</div>";
@@ -1038,21 +1125,24 @@ const TPL = {
       H2(2, "Scénario B · Organisation par produit", "Chaque équipe suit ses clients de bout en bout.") +
       '<div class="org">' + box("Direction", "Cap, décisions, délégations", "top") + '<div class="orow">' + box("Équipe Omra et Hajj", "De la demande au retour du pèlerin") + box("Équipe voyages et circuits", "Europe, Maroc, billetterie") + box("Administration", "Caisse, comptabilité, RH") + "</div></div>" +
       H2(3, "Comparaison des scénarios") + T(["Critère", "Scénario A · par pôle", "Scénario B · par produit"], [["Clarté des responsabilités", "Forte : chaque étape a un pôle", "Moyenne : chacun fait plusieurs étapes"], ["Continuité en cas d'absence", "Bonne, si chaque pôle a deux personnes", "Plus fragile dans les petites équipes"], ["Relation client", "Plusieurs interlocuteurs, passations à soigner", "Un interlocuteur unique"], ["Montée en charge en saison", "Renforts ciblés par pôle", "Renforts à former sur tout le parcours"], ["Taille d'équipe adaptée", "À partir de six personnes environ", "Petites équipes très polyvalentes"], ["Recommandation de la consultante", F("à compléter après le diagnostic"), F("")]]) +
-      BOX("Décision de la direction", "<p>Scénario retenu : " + F("A ou B") + ". Adaptations demandées : " + F("") + "</p>" + SIGN("Direction de Swisse Travel", "Lamia Adel, consultante RH")));
+      BOX("Décision de la direction", "<p>Scénario retenu : " + F("A ou B") + ". Adaptations demandées : " + F("") + "</p>" + SIGN("Direction de Swisse Travel", "Lamia Adel, consultante RH · DIGIVAS")));
   },
 
-  "fiche-role": lv => docShell(lv, "Une fiche par poste, rédigée avec le titulaire en une heure, puis signée par lui et par la direction. Elle dit ce que la personne porte, ce qu'elle peut décider seule et sur quoi elle est évaluée.",
+  "fiche-role": lv => docShell(lv, "Une fiche par poste, qui dit ce que la personne porte, ce qu'elle décide seule et sur quoi elle est évaluée. Les sept propositions ci-dessous partent du diagnostic et se valident en une heure avec chaque titulaire, avant signature.",
+    H2(1, "Vue d'ensemble des postes", "Chaque poste a un rattachement et un suppléant, ce qui garantit la continuité pendant les absences.") +
+    T(["Poste", "Pôle", "Rattachement", "Suppléant·e", "Signée le"], POSTES.map(p => ["<b>" + p.t + "</b>", p.pole, p.rat, p.sup, F("")])) +
+    BOX("Comment utiliser ces fiches", "<ol><li>Relire la proposition avec le titulaire et corriger ce qui ne correspond pas à son travail réel.</li><li>Compléter les limites de délégation, en cohérence avec le tableau des délégations.</li><li>Faire signer le titulaire et la direction, puis remettre une copie au salarié.</li></ol>") +
+    POSTES.map(ficheHTML).join("") +
+    '<div class="pb"></div>' + H2(9, "Modèle vierge", "Pour un poste nouveau ou un saisonnier.") +
     '<table class="meta"><tr><td>Intitulé du poste</td><td>' + F("ex. Conseiller·ère voyages Omra") + "</td><td>Pôle</td><td>" + F("") + "</td></tr><tr><td>Titulaire</td><td>" + F("") + "</td><td>Rattachement</td><td>" + F("") + "</td></tr><tr><td>Suppléant·e</td><td>" + F("") + "</td><td>Supplée</td><td>" + F("poste suppléé par le titulaire") + "</td></tr></table>" +
-    H2(1, "Mission du poste", "Une phrase qui commence par un verbe.") + "<p>" + F("ex. Transformer les demandes des clients en réservations confirmées, en moins de 24 heures.") + "</p>" +
-    H2(2, "Responsabilités principales", "Cinq au maximum, chacune avec son résultat attendu.") + T(["Responsabilité", "Résultat attendu", "Part du temps"], blank(5, 3)) +
-    H2(3, "Ce qui ne relève pas du poste") + "<p>" + F("Les tâches qui reviennent à un autre poste, avec son nom.") + "</p>" +
-    H2(4, "Ce que la personne décide seule") + T(["Décision", "Limite", "Au-delà, qui décide"], blank(3, 3)) +
-    H2(5, "Ce qui change avec les nouveaux outils") + "<p>" + F("ex. Les réponses types sont préparées avec l'IA puis relues avant envoi ; les fiches offres sont rédigées dans le modèle commun.") + "</p>" +
-    H2(6, "Indicateurs") + T(["Indicateur", "Cible", "Source", "Revu"], [[F("ex. délai de première réponse"), F("moins de 15 min"), F("WhatsApp Business"), "Chaque mois"], ["&nbsp;", "&nbsp;", "&nbsp;", "&nbsp;"]]) +
-    H2(7, "Compétences et formation") + T(["Compétence", "Niveau actuel", "Niveau attendu", "Formation prévue"], blank(3, 4)) +
-    SIGN("Titulaire du poste", "Direction de Swisse Travel") +
-    '<div class="pb"></div>' + H2(8, "Postes à couvrir", "La liste de suivi de toutes les fiches de l'agence.") + T(["Poste", "Titulaire", "Suppléant", "Rédigée le", "Signée le"], [["Direction", "&nbsp;", "&nbsp;", "&nbsp;", "&nbsp;"], ["Conseiller·ère voyages", "&nbsp;", "&nbsp;", "&nbsp;", "&nbsp;"], ["Responsable des opérations et dossiers", "&nbsp;", "&nbsp;", "&nbsp;", "&nbsp;"], ["Billetterie et hébergement", "&nbsp;", "&nbsp;", "&nbsp;", "&nbsp;"], ["Caisse et comptabilité", "&nbsp;", "&nbsp;", "&nbsp;", "&nbsp;"], ["Réseaux sociaux et site", "&nbsp;", "&nbsp;", "&nbsp;", "&nbsp;"], ["Accompagnateur·rice", "&nbsp;", "&nbsp;", "&nbsp;", "&nbsp;"]])),
-
+    H3(1, "Mission du poste", "Une phrase qui commence par un verbe.") + "<p>" + F("ex. Transformer les demandes des clients en réservations confirmées, en moins de 24 heures.") + "</p>" +
+    H3(2, "Responsabilités principales", "Cinq au maximum, chacune avec son résultat attendu.") + T(["Responsabilité", "Résultat attendu", "Part du temps"], blank(5, 3)) +
+    H3(3, "Ce qui ne relève pas du poste") + "<p>" + F("Les tâches qui reviennent à un autre poste, avec son nom.") + "</p>" +
+    H3(4, "Ce que la personne décide seule") + T(["Décision", "Limite", "Au-delà, qui décide"], blank(3, 3)) +
+    H3(5, "Ce qui change avec les nouveaux outils") + "<p>" + F("ex. Les réponses types sont préparées avec l'IA puis relues avant envoi ; les fiches offres sont rédigées dans le modèle commun.") + "</p>" +
+    H3(6, "Indicateurs") + T(["Indicateur", "Cible", "Source", "Revu"], [[F("ex. délai de première réponse"), F("moins de 15 min"), F("WhatsApp Business"), "Chaque mois"], ["&nbsp;", "&nbsp;", "&nbsp;", "&nbsp;"]]) +
+    H3(7, "Compétences et formation") + T(["Compétence", "Niveau actuel", "Niveau attendu", "Formation prévue"], blank(3, 4)) +
+    SIGN("Titulaire du poste", "Direction de Swisse Travel")),
   raci: lv => {
     const P = ["Répondre aux demandes WhatsApp", "Établir et envoyer un devis", "Réserver les vols et les hôtels", "Encaisser l'acompte et le solde", "Accorder une remise", "Annuler ou rembourser", "Constituer le dossier visa", "Contrôler le dossier à J-15", "Organiser la réunion pré-départ", "Accompagner le groupe", "Traiter une réclamation", "Mettre à jour les offres sur le site", "Publier sur les réseaux sociaux", "Gérer les plannings et les congés"];
     return docShell(lv, "Pour chaque processus de l'agence, une seule personne est responsable du résultat, et un suppléant est nommé. Le tableau des délégations dit ce que chacun peut décider sans remonter à la direction.",
@@ -1061,7 +1151,7 @@ const TPL = {
       '<p class="note">Règle de contrôle : chaque ligne compte exactement un A et au moins un R. Une ligne sans A est une zone sans responsable.</p>' +
       H2(2, "Tableau des délégations") +
       T(["Décision", "Qui décide seul", "Dans la limite de", "Au-delà, qui valide", "Trace écrite"], [["Remise sur le prix d'un séjour", "&nbsp;", F("___ DH ou ___ %"), "Direction", "Note dans le dossier"], ["Échéancier de paiement", "&nbsp;", F("___ échéances, solde à J-___"), "Direction", "Échéancier signé"], ["Remboursement ou avoir", "&nbsp;", F("selon les conditions de vente"), "Direction", "Bon de remboursement"], ["Encaissement en espèces", "&nbsp;", F("___ DH par opération"), "Direction", "Reçu numéroté"], ["Dépense chez un fournisseur", "&nbsp;", F("___ DH"), "Direction", "Bon de commande"], ["Geste commercial après réclamation", "&nbsp;", F("___ DH"), "Direction", "Note dans le dossier"]]) +
-      BOX("Validation", SIGN("Direction de Swisse Travel", "Lamia Adel, consultante RH")));
+      BOX("Validation", SIGN("Direction de Swisse Travel", "Lamia Adel, consultante RH · DIGIVAS")));
   },
 
   parcours: lv => docShell(lv, "Le chemin d'un pèlerin, de sa première demande à son retour. À chaque étape : un responsable, un déclencheur, un délai et les informations à transmettre. Les trois passations marquées d'une flèche sont celles où l'information se perd le plus souvent.",
@@ -1086,7 +1176,7 @@ const TPL = {
 
   "note-orga": lv => docShell(lv, "Le message que la direction adresse à toute l'équipe pour annoncer l'organisation validée. Il est lu en réunion, puis affiché avec l'organigramme.",
     '<div class="letter"><p>Salé, le ' + F("date") + "</p><p><b>À toute l'équipe de Swisse Travel</b></p><p><b>Objet : notre nouvelle organisation</b></p>" +
-    "<p>Depuis le 9 novembre, nous avons travaillé avec Lamia Adel, consultante RH, sur l'organisation de l'agence. Vous avez été nombreux à répondre au baromètre et à partager votre expérience lors des entretiens. Merci pour votre franchise : elle a guidé chacune des décisions qui suivent.</p>" +
+    "<p>Depuis le 9 novembre, nous avons travaillé avec Lamia Adel, consultante RH chez DIGIVAS, sur l'organisation de l'agence. Vous avez été nombreux à répondre au baromètre et à partager votre expérience lors des entretiens. Merci pour votre franchise : elle a guidé chacune des décisions qui suivent.</p>" +
     "<p>Nous avons décidé d'organiser l'agence " + F("par pôle / par produit") + ". À partir du " + F("date d'effet") + ", chaque processus important a un responsable et un suppléant, écrits dans la matrice affichée en salle. Chacun reçoit sa fiche de rôle, qu'il a construite avec le cabinet, pour signature.</p>" +
     "<p>Trois changements concernent tout le monde dès cette semaine :</p><ol><li>" + F("ex. la permanence WhatsApp suit un planning affiché, avec une première réponse en moins de 15 minutes") + "</li><li>" + F("ex. chaque dossier passe par trois passations écrites et un contrôle à J-15") + "</li><li>" + F("ex. un point d'équipe de vingt minutes a lieu chaque lundi à 9 h") + "</li></ol>" +
     "<p>Les décisions sur les remises, les échéanciers et les remboursements suivent désormais le tableau des délégations : vous pouvez décider seuls dans les limites indiquées, sans attendre mon accord.</p>" +
@@ -1129,7 +1219,7 @@ const TPL = {
     SIGN("Nouveau ou nouvelle salarié·e", "Tuteur ou tutrice")),
 
   lancement: lv => docShell(lv, "Le compte rendu de la première réunion avec la direction. Il fixe le cadre de la mission et lance les trois actions rapides de la semaine 1.",
-    '<table class="meta"><tr><td>Date</td><td>' + F("lundi 9 novembre 2026") + "</td><td>Lieu</td><td>" + F("agence, Salé") + "</td></tr><tr><td>Participants</td><td colspan=\"3\">" + F("Direction de Swisse Travel ; Lamia Adel, consultante RH") + "</td></tr></table>" +
+    '<table class="meta"><tr><td>Date</td><td>' + F("lundi 9 novembre 2026") + "</td><td>Lieu</td><td>" + F("agence, Salé") + "</td></tr><tr><td>Participants</td><td colspan=\"3\">" + F("Direction de Swisse Travel et Lamia Adel, consultante RH chez DIGIVAS") + "</td></tr></table>" +
     H2(1, "Les objectifs de la mission", "Trois objectifs, chacun avec un indicateur de réussite.") +
     T(["Objectif", "Ce que Swisse Travel obtient", "Indicateur de réussite"], [["Des responsabilités claires", "Un organigramme validé, une fiche de rôle par poste et un responsable unique pour chaque processus clé", "100 % des postes avec une fiche signée, 100 % des processus avec un responsable et un suppléant"], ["Un service client fiable", "Des passations écrites entre vente, encaissement et suivi des dossiers, avec un délai à chaque étape", "Première réponse WhatsApp en moins de 15 minutes, 95 % des dossiers complets à J-15"], ["Une équipe prête et outillée", "Une équipe formée aux outils IA, une charte signée et un plan de saison Omra Ramadan 2027", "100 % de l'équipe formée, plan de saison validé avant le 27 novembre 2026"]]) +
     H2(2, "Les six points validés") +
@@ -1142,7 +1232,7 @@ const TPL = {
     H2(5, "Les actions rapides de la semaine 1") +
     T(["N°", "Action", "Responsable", "Pour le"], [[2, ACTIONS[2][1], F(""), dshort(weekEnd(1))], [3, ACTIONS[3][1], F(""), dshort(weekEnd(1))], [4, ACTIONS[4][1], "Direction, avec la consultante", dshort(weekEnd(1))]]) +
     BOX("Garde-fou sur les données", "<p>La mission n'a pas besoin des données des pèlerins. Aucune copie de passeport ni information personnelle de client n'est demandée ou transmise, conformément à la loi 09-08.</p>") +
-    SIGN("Direction de Swisse Travel", "Lamia Adel, consultante RH")),
+    SIGN("Direction de Swisse Travel", "Lamia Adel, consultante RH · DIGIVAS")),
 
   catalogue: lv => docShell(lv, "Une offre dont le départ est passé fait perdre du temps à l'équipe et de la confiance au client. Cette revue retire ce qui n'est plus valable et nomme la personne qui tient le catalogue à jour.",
     H2(1, "Les offres publiées", "Une ligne par offre, sur le site, Facebook, Instagram et les statuts WhatsApp.") +
@@ -1210,7 +1300,7 @@ const TPL = {
       (S.n ? H2(4, "Ce que dit l'équipe") + "<p>" + esc(synthese(S)) + "</p>" : "") +
       H2(S.n ? 5 : 4, "Décisions à prendre") + T(["Décision", "Décision prise", "Responsable"], decisions.map(d => [d, F(""), F("")])) +
       H2(S.n ? 6 : 5, "Prochaines étapes") + T(["N°", "Action", "Semaine", "Pilote"], ids.filter(n => actEnd(n) > c[0] && actEnd(n) <= c[0] + 3).map(n => [n, esc(ACTIONS[n][1]), ACTIONS[n][0], ACTIONS[n][2]])) +
-      BOX("Validation", SIGN("Direction de Swisse Travel", "Lamia Adel, consultante RH")));
+      BOX("Validation", SIGN("Direction de Swisse Travel", "Lamia Adel, consultante RH · DIGIVAS")));
   },
 
   objectifs: lv => docShell(lv, "Un entretien de 30 minutes avec chaque salarié en fin de mission. Il fait le point sur les douze semaines et fixe deux ou trois objectifs reliés à la fiche de rôle.",
@@ -1231,13 +1321,13 @@ const TPL = {
       H2(3, "Retour d'expérience du premier départ") + T(["Ce qui a bien fonctionné", "Ce qui doit être amélioré", "Action"], blank(4, 3)) +
       H2(4, "Ce que dit l'équipe") + "<p>" + F("Synthèse des entretiens de suivi et verbatims marquants, sans nom.") + "</p>" +
       H2(5, "Plan pour la saison Hajj 2027") + T(["Action", "Responsable", "Échéance"], blank(5, 3)) +
-      BOX("Validation du bilan", SIGN("Direction de Swisse Travel", "Lamia Adel, consultante RH")));
+      BOX("Validation du bilan", SIGN("Direction de Swisse Travel", "Lamia Adel, consultante RH · DIGIVAS")));
   }
 };
 
 /* ---------- Espace consultante : coque, onglets, suivi ---------- */
 let suivi = {}, loadedOnce = false;
-const TABS = [["", "Tableau de bord"], ["plan", "Plan d'action"], ["reco", "Recommandations"], ["livrables", "Livrables"], ["outils", "Outils"], ["methode", "Méthode"]];
+const TABS = [["", "Tableau de bord"], ["plan", "Plan d'action"], ["reco", "Recommandations"], ["livrables", "Livrables"], ["outils", "Outils"], ["atelier", "Atelier IA"], ["methode", "Méthode"]];
 const sub = () => (location.hash.split("/")[1] || "");
 async function loadSuivi() {
   try { const d = await sb("rpc/digivas_suivi_lire", { p_mission: MISSION, p_code: code }, "return=representation"); suivi = Object.fromEntries((d || []).map(s => [s.cle, s])); }
@@ -1254,7 +1344,7 @@ function renderConsultant() {
   const stamp = el("span", { class: "small" });
   const body = el("div");
   const tab = TABS.some(t => t[0] === sub()) ? sub() : "";
-  const draw = () => { body.textContent = ""; if (tab === "") drawResults(body); else if (tab === "reco") drawReco(body); else if (tab === "plan") drawPlan(body); else if (tab === "livrables") drawLivrables(body, "plan"); else if (tab === "outils") drawLivrables(body, "outil"); else drawMethode(body); drawStrip(); };
+  const draw = () => { body.textContent = ""; if (tab === "") drawResults(body); else if (tab === "reco") drawReco(body); else if (tab === "plan") drawPlan(body); else if (tab === "livrables") drawLivrables(body, "plan"); else if (tab === "outils") drawLivrables(body, "outil"); else if (tab === "atelier") drawAtelier(body); else drawMethode(body); drawStrip(); };
   const refresh = async (force) => {
     try {
       await load(code); await loadSuivi(); loadedOnce = true;
@@ -1264,7 +1354,7 @@ function renderConsultant() {
   };
   window.refreshResults = () => refresh(true);
   root.append(el("div", { class: "topbar" },
-    el("div", {}, el("div", { class: "eyebrow", text: "Espace consultante · accès réservé" }), el("h1", { text: "Mission RH Swisse Travel" }), stamp),
+    el("div", {}, el("div", { class: "eyebrow", text: "Espace consultante DIGIVAS · accès réservé" }), el("h1", { text: "Mission RH Swisse Travel" }), stamp),
     el("div", { class: "nav" },
       el("button", { class: "ghost", text: "Actualiser", onclick: () => refresh(true) }),
       el("button", { class: "ghost", text: "Télécharger en CSV", onclick: exportCsv }),
@@ -1386,7 +1476,7 @@ function drawLivrables(body, grp) {
             el("div", { class: "ltitle" }, el("span", { class: "qn", text: (grp === "plan" ? "L" : "O") + String(LIVMAP[l.k].n).padStart(2, "0") }), el("b", { text: l.t }), l.auto ? el("span", { class: "tag", text: ["point-suivi", "comite"].includes(l.k) ? "généré" : "données du baromètre" }) : null, s.a_contenu ? el("span", { class: "tag", text: "version enregistrée" }) : null),
             el("p", { class: "small", text: l.d }),
             el("span", { class: "meta", text: (l.a ? "Action n° " + l.a + " · " : "") + (l.recur ? "chaque semaine" : "échéance " + dfmt(due)) + (late ? " · en retard" : "") })),
-          el("div", { class: "lside" }, selEl, note, el("div", { class: "nav" }, msg, el("a", { class: "btn ghost", href: "#espace-digivas/doc/" + l.k, text: "Ouvrir le modèle" }))));
+          el("div", { class: "lside" }, selEl, note, el("div", { class: "nav" }, msg, el("a", { class: "btn ghost", href: "#espace-digivas/doc/" + l.k, text: "Ouvrir" }), el("button", { class: "ghost", text: "Rédiger avec l'IA", onclick: () => { try { sessionStorage.setItem("digivas-gen-open", l.k); } catch (e) {} location.hash = "#espace-digivas/doc/" + l.k; } }))));
       }))));
   });
 }
@@ -1415,6 +1505,159 @@ function drawMethode(body) {
       p("Les statuts, les notes et les versions enregistrées des livrables sont conservés avec les résultats, et retrouvés depuis n'importe quel appareil avec le même code. Le bouton « Verrouiller » ferme l'accès sur l'appareil utilisé."))));
 }
 
+/* ---------- Rédaction assistée par l'IA ---------- */
+const PRESETS = {
+  lancement: "Complète le compte rendu à partir des décisions notées dans le plan d'action. Ajoute en tête une synthèse de la réunion en cinq lignes et la liste des engagements pris par chacun.",
+  invitation: "Rends le message plus chaleureux et plus court, adapté à une petite équipe, et ajoute une version en arabe pour WhatsApp.",
+  permanence: "Propose une répartition type pour une équipe de quatre conseillers sur six jours, en laissant les noms à compléter, et ajoute cinq réponses types aux questions les plus fréquentes sur la Omra.",
+  catalogue: "Ajoute une liste de contrôle en dix points pour vérifier une fiche offre avant publication, et un exemple de fiche offre Omra bien rédigée.",
+  entretien: "Adapte le guide aux résultats du baromètre : ajoute pour chaque dimension faible deux questions de relance concrètes, et une grille de synthèse des entretiens à remplir après coup.",
+  "releve-temps": "Ajoute en tête une consigne d'une demi-page qui explique la démarche à l'équipe et la rassure sur l'usage des données.",
+  conformite: "Pré-remplis la colonne Priorité selon le risque habituel pour une agence de voyages de cette taille et propose pour chaque point l'action corrective type. Signale ce qui doit être vérifié avec un juriste.",
+  "point-suivi": "Rédige en tête une synthèse de l'avancement en trois phrases et propose les trois décisions à demander à la direction cette semaine.",
+  comite: "Rédige en tête une note de synthèse d'une page avec les messages clés pour la direction et les décisions que la consultante recommande.",
+  restitution: "Rédige en tête une synthèse exécutive d'une page, puis pour chaque dimension un paragraphe d'analyse qui relie les scores aux recommandations. Reste factuelle et bienveillante, sans jamais désigner une personne.",
+  diagnostic: "Rédige la synthèse pour la direction et les priorités de la phase de conception à partir du baromètre et de l'avancement du plan. Laisse à compléter les sections entretiens, charge de travail et conformité.",
+  saison: "Complète les règles de congés et les renforts pour une saison Omra Ramadan dont le premier départ a lieu le 24 janvier 2027, et ajoute une section sur les risques de la saison et les parades prévues.",
+  organigramme: "Rédige la recommandation de la consultante entre les deux scénarios en tenant compte des résultats du baromètre, et complète le tableau de comparaison.",
+  "fiche-role": "Ajuste les sept fiches de poste en fonction des recommandations du baromètre et ajoute pour chaque poste une ligne qui décrit le rôle du suppléant pendant une absence.",
+  raci: "Pré-remplis la matrice avec la répartition R, A, C et I recommandée pour une agence de cette taille, avec un seul A par ligne, et propose des seuils de délégation à valider par la direction.",
+  parcours: "Ajoute une illustration des trois passations avec l'exemple concret d'un dossier Omra, et un tableau des erreurs fréquentes avec leur parade.",
+  "note-orga": "Rédige une version finale de la note, chaleureuse et claire, en considérant que l'organisation par pôle a été retenue.",
+  "charte-ia": "Ajoute un tableau de dix exemples concrets de bonnes et de mauvaises pratiques propres à une agence Omra.",
+  formation: "Ajoute pour chaque atelier les objectifs pédagogiques, le matériel nécessaire et trois exercices détaillés sur des cas de l'agence.",
+  "tableau-bord": "Ajoute pour chaque indicateur une règle d'alerte, avec un seuil orange et un seuil rouge, et l'action à déclencher.",
+  accueil: "Rédige le texte de bienvenue complet et les règles du quotidien, au tutoiement, avec un ton chaleureux.",
+  objectifs: "Propose trois exemples d'objectifs individuels pour chaque poste de l'agence, reliés aux indicateurs des fiches de poste.",
+  bilan: "Rédige l'analyse du bilan à partir des valeurs saisies dans le plan d'action, avec un paragraphe par résultat, puis le plan d'amélioration pour la saison Hajj 2027."
+};
+let iaEtat = null;
+const iaPret = async () => { if (iaEtat) return iaEtat; try { iaEtat = await (await fetch("/api/generer", { cache: "no-store" })).json(); } catch (e) { iaEtat = { pret: false, injoignable: true }; } return iaEtat; };
+const iaCle = k => "ia-" + k;
+async function iaConsigne(k) {
+  try { const v = await sb("rpc/digivas_suivi_doc", { p_mission: MISSION, p_code: code, p_cle: iaCle(k) }, "return=representation"); return v || PRESETS[k] || ""; }
+  catch (x) { return PRESETS[k] || ""; }
+}
+const iaSauver = (k, txt) => sb("rpc/digivas_suivi_maj", { p_mission: MISSION, p_code: code, p_cle: iaCle(k), p_contenu: txt });
+
+function iaContexte(lv) {
+  const S = computeStats(rows), ids = Object.keys(ACTIONS).map(Number);
+  const st = n => { const x = (suivi[actKey(n)] || {}); return (x.statut === "valide" ? "fait" : x.statut === "en_cours" ? "en cours" : "à faire") + (x.note ? " (note : " + x.note + ")" : ""); };
+  let t = "MISSION\nAccompagnement RH de Swisse Travel, agence de voyages spécialisée Omra et Hajj à Salé, par Lamia Adel, consultante RH chez DIGIVAS. Douze semaines, du 9 novembre 2026 au 29 janvier 2027. Premier départ Omra Ramadan le 24 janvier 2027. Plan de saison à valider avant le 27 novembre 2026. Comités de pilotage le 20 novembre 2026, le 11 décembre 2026 et le 29 janvier 2027. Logiciel de réservation : Travelife. Une grande partie des demandes arrive par WhatsApp. Objectifs : responsabilités claires, service client fiable, équipe prête et outillée, sans recrutement.\n";
+  t += "Date du jour : " + dfmt(new Date()) + ", semaine S" + Math.max(1, weekNow()) + " de la mission.\n";
+  t += "Livrable demandé : " + lv.t + ". " + lv.d + (lv.a ? " Action " + lv.a + " du plan : " + ACTIONS[lv.a][1] + ". Livrable attendu : " + ACTIONS[lv.a][3] + ". Pilote : " + ACTIONS[lv.a][2] + "." : "") + "\n\n";
+  if (S.n) {
+    t += "BAROMÈTRE DE L'ORGANISATION\n" + S.n + " réponses (" + S.dir.length + " direction, " + S.eq.length + " équipe). Score global " + S.g + " sur 100" + (S.both ? ", direction " + S.gd + ", équipe " + S.ge : "") + ".\n";
+    t += S.dims.map(x => "- " + x.d.name + " : " + x.v + " sur 100" + (x.vd != null && x.ve != null ? " (direction " + x.vd + ", équipe " + x.ve + ")" : "")).join("\n") + "\n";
+    t += "Synthèse : " + synthese(S) + "\n";
+    t += "Détail des affirmations (moyenne sur 4, part en désaccord" + (S.both ? ", direction / équipe" : "") + ") :\n" + S.q.map(o => qn(o.i) + " " + o.t + " : " + fmt1(o.a) + ", " + Math.round(o.neg * 100) + " %" + (o.gap != null ? ", " + fmt1(o.ad) + " / " + fmt1(o.ae) : "")).join("\n") + "\n";
+    const R = recos(S).slice(0, 10);
+    if (R.length) t += "Recommandations prioritaires :\n" + R.map(o => "- " + prioLabel(o.prio)[0] + " · " + qn(o.i) + " · " + o.r + " (action " + o.act + ")").join("\n") + "\n";
+    const coms = rows.filter(r => r.commentaire).map(r => "« " + r.commentaire + " »");
+    if (coms.length) t += "Commentaires anonymes de l'équipe :\n" + coms.join("\n") + "\n";
+  } else t += "BAROMÈTRE : aucune réponse reçue pour l'instant.\n";
+  t += "\nPLAN D'ACTION (" + ids.filter(actDone).length + " actions faites sur 22)\n" + ids.map(n => n + ". " + ACTIONS[n][0] + " · " + ACTIONS[n][1] + " · " + st(n)).join("\n") + "\n";
+  const dec = DECISIONS.map(([a], i) => (suivi["dec-" + (i + 1)] || {}).note ? "- " + a + " : " + suivi["dec-" + (i + 1)].note : "").filter(Boolean);
+  if (dec.length) t += "\nDÉCISIONS DE LANCEMENT\n" + dec.join("\n") + "\n";
+  const res = RESULTATS.map(([r, ind, cible], i) => { const v = resVal(i + 1); return v.d || v.f ? "- " + r + " (" + ind + ", cible " + cible + ") : départ " + (v.d || "non mesuré") + ", fin " + (v.f || "non mesuré") : ""; }).filter(Boolean);
+  if (res.length) t += "\nRÉSULTATS MESURÉS\n" + res.join("\n") + "\n";
+  return t.slice(0, 29000);
+}
+
+const iaNettoyer = s => s.replace(/^\s*```(?:html)?\s*/i, "").replace(/```\s*$/, "").replace(/<!--DIGIVAS:[^>]*-->/g, "").split('src="LOGO"').join('src="' + LOGO + '"');
+let iaAbort = null;
+
+function iaPanel(k, lv, paper, setMsg) {
+  const ta = el("textarea", { rows: "4", maxlength: "6000", "aria-label": "Consigne pour l'IA", placeholder: "Décrivez ce que le livrable doit contenir, le ton, les ajouts ou les modifications…" });
+  const etat = el("p", { class: "small", text: "Vérification de la rédaction IA…" });
+  const prog = el("span", { class: "small" });
+  let backup = null;
+  const annuler = el("button", { class: "ghost", text: "Revenir à la version précédente", hidden: true, onclick: () => { if (backup != null) { paper.innerHTML = backup; backup = null; annuler.hidden = true; prog.textContent = "Version précédente rétablie."; } } });
+  const stop = el("button", { class: "ghost", text: "Arrêter", hidden: true, onclick: () => iaAbort && iaAbort.abort() });
+  const run = async (mode) => {
+    const consigne = ta.value.trim(); if (!consigne) { prog.textContent = "Écrivez d'abord une consigne."; return; }
+    const doc = (mode === "modele" ? TPL[k](lv) : paper.innerHTML).split(LOGO).join("LOGO");
+    backup = paper.innerHTML; btns.forEach(b => b.disabled = true); stop.hidden = false; annuler.hidden = true;
+    prog.textContent = "Envoi de la consigne…";
+    iaSauver(k, consigne).catch(() => {});
+    iaAbort = new AbortController();
+    let acc = "", last = 0;
+    try {
+      const res = await fetch("/api/generer", { method: "POST", headers: { "Content-Type": "application/json" }, signal: iaAbort.signal, body: JSON.stringify({ mission: MISSION, code, consigne, document: doc, contexte: iaContexte(lv), titre: lv.t }) });
+      if (!res.ok) {
+        const e = await res.json().catch(() => ({}));
+        throw new Error(e.erreur === "cle_absente" ? "La rédaction IA n'est pas encore activée : la clé API n'est pas configurée dans Vercel." : e.erreur === "acces_refuse" ? "Le code n'est plus valide." : e.erreur === "trop_long" ? "Le document ou la consigne est trop long." : e.erreur === "api" ? "Le service d'IA a refusé la demande (statut " + e.statut + ")." : "La rédaction n'a pas pu démarrer.");
+      }
+      const rd = res.body.getReader(), dec = new TextDecoder();
+      prog.textContent = "Rédaction en cours…";
+      for (;;) {
+        const { done, value } = await rd.read(); if (done) break;
+        acc += dec.decode(value, { stream: true });
+        if (Date.now() - last > 600) { last = Date.now(); paper.innerHTML = sanitize(iaNettoyer(acc)); prog.textContent = "Rédaction en cours… " + Math.round(acc.length / 1000) + " k caractères"; }
+      }
+      paper.innerHTML = sanitize(iaNettoyer(acc));
+      prog.textContent = acc.includes("DIGIVAS:TRONQUE") ? "Le livrable est long et a été coupé à la fin : relancez avec une consigne plus ciblée ou complétez à la main." : acc.includes("DIGIVAS:ERREUR") ? "La rédaction s'est interrompue. Le début est affiché, vous pouvez relancer." : "Brouillon rédigé. Relisez-le, complétez-le si besoin, puis cliquez sur Enregistrer.";
+      setMsg("Brouillon IA non enregistré");
+    } catch (x) {
+      if (x.name === "AbortError") { prog.textContent = "Rédaction arrêtée. Le texte déjà rédigé est affiché."; if (acc) paper.innerHTML = sanitize(iaNettoyer(acc)); }
+      else { prog.textContent = x.message; if (!acc) { paper.innerHTML = backup; backup = null; } }
+    }
+    btns.forEach(b => b.disabled = false); stop.hidden = true; annuler.hidden = backup == null;
+  };
+  const btns = [
+    el("button", { class: "primary", text: "Générer depuis le modèle", onclick: () => run("modele") }),
+    el("button", { class: "ghost", text: "Retravailler la version affichée", onclick: () => run("version") })];
+  const panel = el("details", { class: "iapanel noprint" },
+    el("summary", {}, el("b", { text: "Rédiger avec l'IA" }), el("span", { class: "small", text: " · écrivez une consigne, l'IA rédige le livrable en gardant ce modèle" })),
+    etat, ta,
+    el("div", { class: "nav" },
+      el("div", { class: "nav" }, el("button", { class: "ghost", text: "Consigne proposée", onclick: () => { ta.value = PRESETS[k] || ""; } }), el("button", { class: "ghost", text: "Enregistrer la consigne", onclick: async () => { try { await iaSauver(k, ta.value.trim()); prog.textContent = "Consigne enregistrée."; } catch (e) { prog.textContent = "Échec de l'enregistrement."; } } })),
+      el("div", { class: "nav" }, stop, annuler, ...btns)),
+    prog);
+  iaConsigne(k).then(v => { if (!ta.value) ta.value = v; });
+  iaPret().then(e => {
+    etat.textContent = e.pret ? "Rédaction IA active. L'IA reçoit la consigne, le modèle et les données anonymes de la mission (baromètre sans noms, avancement du plan). Le résultat reste un brouillon jusqu'à ce que vous l'enregistriez." : e.injoignable ? "La rédaction IA n'est disponible que sur le site en ligne." : "La rédaction IA n'est pas encore activée. Ajoutez la variable ANTHROPIC_API_KEY dans les réglages du projet Vercel (voir l'onglet Atelier IA).";
+    if (!e.pret) btns.forEach(b => b.disabled = true);
+  });
+  return { panel, run, open: () => { panel.open = true; } };
+}
+
+function drawAtelier(body) {
+  const box = el("div", { class: "card", style: "margin-bottom:16px" }, el("h3", { text: "Atelier de rédaction" }),
+    el("p", { class: "small", text: "Choisissez un livrable, écrivez ou modifiez la consigne, puis lancez la rédaction. L'IA part du modèle aux couleurs de Swisse Travel et DIGIVAS, garde sa mise en page et s'appuie sur le baromètre anonyme et l'avancement du plan. Chaque consigne est enregistrée avec le livrable." }));
+  const etat = el("p", { class: "small", text: "Vérification…" });
+  box.append(etat);
+  iaPret().then(e => {
+    etat.textContent = "";
+    if (e.pret) etat.append(el("span", { class: "ok", text: "Rédaction IA active · modèle " + e.modele }));
+    else etat.append(el("div", { class: "box-inline" }, el("b", { text: "Activer la rédaction IA en trois étapes" }),
+      el("ol", {}, el("li", { text: "Créez une clé API sur console.anthropic.com (rubrique API keys)." }), el("li", { text: "Dans Vercel, ouvrez le projet digivas-barometre, puis Settings, Environment Variables, et ajoutez ANTHROPIC_API_KEY avec cette clé." }), el("li", { text: "Redéployez le projet depuis l'onglet Deployments. La rédaction s'active alors ici." })),
+      el("p", { class: "small", text: "La clé reste côté serveur, elle n'apparaît jamais dans la page. Chaque rédaction consomme quelques centimes de crédit API." })));
+  });
+  body.append(box);
+  const sel = el("select", { "aria-label": "Livrable à rédiger" },
+    el("optgroup", { label: "Les douze livrables du plan" }, LIVS.filter(l => l.grp === "plan").map(l => el("option", { value: l.k, text: "L" + String(LIVMAP[l.k].n).padStart(2, "0") + " · " + l.t }))),
+    el("optgroup", { label: "Les outils de la consultante" }, LIVS.filter(l => l.grp === "outil").map(l => el("option", { value: l.k, text: "O" + String(LIVMAP[l.k].n).padStart(2, "0") + " · " + l.t }))));
+  const ta = el("textarea", { rows: "6", maxlength: "6000", "aria-label": "Consigne" });
+  const desc = el("p", { class: "small" }), msg = el("span", { class: "small" });
+  const mode = el("select", { "aria-label": "Point de départ" }, el("option", { value: "modele", text: "Partir du modèle" }), el("option", { value: "version", text: "Retravailler la version enregistrée" }));
+  const load = async () => { const l = LIVMAP[sel.value]; desc.textContent = l.d; ta.value = "Chargement…"; ta.value = await iaConsigne(sel.value); mode.value = (suivi[sel.value] || {}).a_contenu ? "version" : "modele"; };
+  sel.addEventListener("change", load);
+  body.append(el("div", { class: "card" },
+    el("div", { class: "field" }, el("label", { text: "Livrable" }), sel, desc),
+    el("div", { class: "field" }, el("label", { text: "Consigne pour l'IA" }), ta),
+    el("div", { class: "nav" },
+      el("div", { class: "nav" }, el("button", { class: "ghost", text: "Consigne proposée", onclick: () => { ta.value = PRESETS[sel.value] || ""; } }), el("button", { class: "ghost", text: "Enregistrer", onclick: async () => { try { await iaSauver(sel.value, ta.value.trim()); msg.textContent = "Consigne enregistrée."; } catch (e) { msg.textContent = "Échec de l'enregistrement."; } } }), msg),
+      el("div", { class: "nav" }, mode, el("button", { class: "primary", text: "Rédiger le livrable", onclick: async () => {
+        try { await iaSauver(sel.value, ta.value.trim()); } catch (e) {}
+        try { sessionStorage.setItem("digivas-gen", JSON.stringify({ k: sel.value, mode: mode.value })); } catch (e) {}
+        location.hash = "#espace-digivas/doc/" + sel.value;
+      } })))));
+  body.append(el("div", { class: "card", style: "margin-top:16px" }, el("h3", { text: "Écrire une bonne consigne" }),
+    el("ul", { class: "doclist" }, ["Dites ce que vous voulez obtenir et pour qui : « une note d'une page pour la direction ».", "Donnez les faits que l'IA ne peut pas connaître : effectif, noms des pôles, décisions prises en réunion.", "Précisez ce qu'il faut garder, ajouter ou supprimer dans le modèle.", "Pour corriger un brouillon, choisissez « Retravailler la version enregistrée » et décrivez seulement les changements.", "Relisez toujours le brouillon : l'IA ne remplace ni votre jugement ni l'avis d'un juriste."].map(t => el("li", { text: t })))));
+  load();
+}
+
 /* ---------- Vue document ---------- */
 const sanitize = html => { const d = new DOMParser().parseFromString("<div>" + html + "</div>", "text/html"); d.querySelectorAll("script,iframe,object,embed,link,meta,style").forEach(n => n.remove()); d.querySelectorAll("*").forEach(n => [...n.attributes].forEach(a => { if (/^on/i.test(a.name) || /javascript:/i.test(a.value)) n.removeAttribute(a.name); })); return d.body.firstChild.innerHTML; };
 
@@ -1426,7 +1669,7 @@ async function renderDoc(k) {
   const msg = el("span", { class: "small" });
   const paper = el("article", { class: "doc", contenteditable: "true", spellcheck: "true", "aria-label": lv.t });
   const bar = el("div", { class: "docbar noprint" },
-    el("a", { class: "btn ghost", href: "#espace-digivas/livrables", text: "← Livrables" }),
+    el("a", { class: "btn ghost", href: "#espace-digivas/" + (lv.grp === "plan" ? "livrables" : "outils"), text: lv.grp === "plan" ? "← Livrables" : "← Outils" }),
     el("div", { class: "nav" }, msg,
       el("button", { class: "ghost", text: lv.auto ? "Régénérer avec les dernières réponses" : "Revenir au modèle", onclick: async () => { paper.innerHTML = TPL[k](lv); try { await sb("rpc/digivas_suivi_maj", { p_mission: MISSION, p_code: code, p_cle: k, p_effacer: true }); } catch (e) {} msg.textContent = "Modèle rechargé, version enregistrée effacée."; } }),
       el("button", { class: "ghost", text: "Télécharger pour Word", onclick: () => exportWord(lv, paper) }),
@@ -1438,7 +1681,8 @@ async function renderDoc(k) {
         catch (x) { if (denied(x)) return lockOut("Le code n'est plus valide."); msg.textContent = "Échec de l'enregistrement : vérifiez la connexion."; }
       } })));
   const tip = el("p", { class: "doctip noprint", text: "Cliquez dans le document pour le compléter : les zones grisées en pointillés sont à remplir. Pensez à enregistrer avant de quitter la page." });
-  app.append(el("div", { class: "docwrap" }, bar, tip, paper));
+  const ia = iaPanel(k, lv, paper, t => { msg.textContent = t; });
+  app.append(el("div", { class: "docwrap" }, bar, tip, ia.panel, paper));
   paper.append(el("p", { class: "small", text: "Chargement du modèle…" }));
   try {
     if (!loadedOnce) { await load(code); await loadSuivi(); loadedOnce = true; }
@@ -1447,6 +1691,9 @@ async function renderDoc(k) {
     else paper.innerHTML = TPL[k](lv);
   } catch (x) { if (denied(x)) return lockOut("Le code n'est plus valide."); paper.innerHTML = TPL[k](lv); msg.textContent = "Hors connexion : modèle vierge affiché."; }
   window.scrollTo(0, 0);
+  let gen = null; try { gen = JSON.parse(sessionStorage.getItem("digivas-gen") || "null"); sessionStorage.removeItem("digivas-gen"); } catch (e) {}
+  try { if (sessionStorage.getItem("digivas-gen-open") === k) { sessionStorage.removeItem("digivas-gen-open"); ia.open(); } } catch (e) {}
+  if (gen && gen.k === k) { ia.open(); const e = await iaPret(); if (e.pret) setTimeout(() => ia.run(gen.mode), 400); }
 }
 
 function exportWord(lv, paper) {

@@ -1,8 +1,11 @@
-# Baromètre de l'organisation · DIGIVAS
+# Baromètre et espace consultante · Swisse Travel · DIGIVAS
 
-Questionnaire RH en 20 affirmations, publié pour chaque mission client du cabinet DIGIVAS.
+- `index.html` : questionnaire de l'équipe et espace consultante (`#espace-digivas`, accès par code).
+- `api/generer.js` : rédaction des livrables assistée par l'IA (fonction Vercel).
 
-- Lien répondants : `https://<domaine>/?m=<mission>` (par défaut `swisse-travel`)
-- Espace DIGIVAS : `https://<domaine>/?m=<mission>#espace-digivas`, code d'accès vérifié côté serveur
+## Activer la rédaction IA
+Dans Vercel, projet `digivas-barometre` → Settings → Environment Variables :
+- `ANTHROPIC_API_KEY` : clé API créée sur console.anthropic.com (obligatoire)
+- `ANTHROPIC_MODEL` : modèle à utiliser (facultatif, `claude-sonnet-5-5` par défaut)
 
-Les réponses sont enregistrées dans Supabase (tables `digivas_missions` et `digivas_reponses`). Les répondants peuvent seulement envoyer une réponse. La lecture passe par la fonction `digivas_resultats`, qui vérifie le code de la mission.
+Puis redéployer. La clé reste côté serveur. Chaque appel vérifie d'abord le code de l'espace consultante.
