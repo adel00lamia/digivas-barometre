@@ -1204,7 +1204,7 @@ const TPL = {
     const decisions = c[0] === 2 ? ["Valider le diagnostic et les priorités", "Valider le plan de saison Omra Ramadan 2027", "Choisir les personnes associées aux fiches de rôle"] : c[0] === 5 ? ["Choisir le scénario d'organisation", "Valider les fiches de rôle et la matrice RACI", "Arrêter les seuils du tableau des délégations", "Valider le parcours client et fixer la date d'annonce"] : ["Valider le bilan chiffré", "Arrêter le plan d'amélioration pour la saison Hajj 2027", "Confier les rituels de pilotage après la mission"];
     return docShell(lv, c[1] + ", prévu le " + dfmt(c[2]) + ". Une heure, direction et consultante, pour valider les livrables et prendre les décisions écrites.",
       H2(1, "Ordre du jour") + "<ol><li>Avancement du plan d'action</li><li>Livrables présentés pour validation</li>" + (S.n ? "<li>Ce que dit l'équipe</li>" : "") + "<li>Décisions à prendre</li><li>Prochaines étapes</li></ol>" +
-      H2(2, "Avancement du plan", ids.filter(actDone).length + " actions faites sur 22. Situation des actions prévues jusqu'à la semaine " + c[0] + ".") +
+      H2(2, "Avancement du plan", (d => d + (d > 1 ? " actions faites" : " action faite"))(ids.filter(actDone).length) + " sur 22. Situation des actions prévues jusqu'à la semaine " + c[0] + ".") +
       T(["N°", "Action", "Semaine", "Statut"], phaseIds.map(n => [n, esc(ACTIONS[n][1]), ACTIONS[n][0], actDone(n) ? "Fait" : '<b style="color:#b4432f">' + ACT_ST.find(s => s[0] === ((suivi[actKey(n)] || {}).statut || "a_faire"))[1] + "</b>"])) +
       H2(3, "Livrables présentés") + T(["Livrable", "Statut", "Validé en comité"], livsDue.map(l => [esc(l.t), st(l), "☐"])) +
       (S.n ? H2(4, "Ce que dit l'équipe") + "<p>" + esc(synthese(S)) + "</p>" : "") +
